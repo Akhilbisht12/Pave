@@ -1,35 +1,33 @@
-import {View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import silly from '../../../Silly/styles/silly';
-import {
-  SillyView,
-  SillyText,
-  SillyRadio,
-  SillyButton,
-} from '../../../Silly/components/silly_comps';
-import {clr1, clr3, clr4, sec_clr_opac} from '../../../config/globals';
+import {SillyView, SillyText} from '../../../Silly/components/silly_comps';
+import {clr1, clr3, clr4, clr5} from '../../../config/globals';
 import Icon from 'react-native-vector-icons/Ionicons';
-const Tdata = [
-  {
-    type: 'Manual Deposit',
-    date: '24dec2022',
-    deposit: 250,
-    amount: 1000,
-  },
-  {
-    type: 'Manual Deposit',
-    date: '24dec2022',
-    deposit: 250,
-    amount: 1000,
-  },
-  {
-    type: 'Manual Deposit',
-    date: '24dec2022',
-    deposit: 250,
-    amount: 1000,
-  },
-];
+import {useEffect} from 'react';
+import axios from 'axios';
+import {server} from '../../../config/server_url';
+import {useContext} from 'react';
+import AuthContext from '../../../navigations/AuthContext';
+import moment from 'moment';
+
 const Transactions = ({setTrans, trans}) => {
+  const [investments, setInvestments] = useState([]);
+  const {state} = useContext(AuthContext);
+  const {user_id} = state;
+  useEffect(() => {
+    const investmentreq = async () => {
+      try {
+        const investmentres = await axios.get(
+          `${server}/investment/precious-metal/${user_id}/investments/?ordering=-created_at`,
+        );
+        setInvestments(investmentres.data.results);
+      } catch (error) {
+        console.log(error.response);
+      }
+    };
+    investmentreq();
+  }, [user_id]);
   return (
     <View
       style={[
@@ -51,37 +49,35 @@ const Transactions = ({setTrans, trans}) => {
           <Icon name="close-outline" size={35} />
         </TouchableOpacity>
       </SillyView>
-      <View style={[silly.p1, silly.my1]}>
-        {Tdata.map((item, i) => {
+      <ScrollView style={[silly.p1, silly.my1, silly.h60p]}>
+        {investments.map((item, i) => {
           return (
             <View key={i}>
               <View style={[silly.aic, silly.jcbtw, silly.fr, silly.my1]}>
                 <View>
                   <SillyText family="SemiBold" size={20} color={clr4}>
-                    {item.type}
+                    {item.metal_type} {item.investment_type_label}
                   </SillyText>
-                  <SillyText my={5}>{item.date}</SillyText>
+                  <SillyText color={clr5} my={5}>
+                    {moment(item.created_at).format('DD MMM YYYY')}
+                  </SillyText>
                 </View>
 
                 <View style={[silly.aie]}>
                   <SillyText family="SemiBold" size={25} color={clr4}>
-                    ₹ {item.deposit}
+                    ₹ {item.transaction_details.amount}
                   </SillyText>
-                  <SillyText my={5}>Balance: ₹ {item.amount}</SillyText>
+                  <SillyText color={clr5} my={5}>
+                    INV No. {item.transaction_details.invoice_number}
+                  </SillyText>
                 </View>
               </View>
-              {i === 0 ? (
-                <SillyButton bg={`${clr1}4d`}>
-                  <SillyText center family="SemiBold" color={clr1}>
-                    Invest Again
-                  </SillyText>
-                </SillyButton>
-              ) : null}
+
               <SillyView bg={clr3} py={0.5} />
             </View>
           );
         })}
-      </View>
+      </ScrollView>
     </View>
   );
 };

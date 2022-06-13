@@ -175,8 +175,8 @@ const OTPVerify = ({otpScreen, setOtpScreen, authData}) => {
       }, 1000 * 60 * 1.5);
       ToastAndroid.show(otp.data.message, ToastAndroid.SHORT);
     } catch (error) {
-      console.log(error);
-      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      console.log(error.response);
+      ToastAndroid.show(error.response.data.detail, ToastAndroid.SHORT);
     }
   };
   return (

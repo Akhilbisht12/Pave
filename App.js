@@ -1,9 +1,11 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import StackNav from './src/navigations/StackNav';
 import {Provider} from 'react-redux';
 import Store from './src/store/Store';
+import axios from 'axios';
+import silly from './src/Silly/styles/silly';
 const App = () => {
   return (
     <Provider store={Store}>

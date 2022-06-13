@@ -31,7 +31,7 @@ const Settings = ({navigation}) => {
           py={15}
           style={[silly.fr, silly.aic]}
           bg="#25195E40"
-          onPress={() => navigation.navigate('ProfileEdit')}>
+          onPress={() => navigation.navigate('Profile')}>
           <Icon size={20} color={clr1} name="person-outline" />
           <SillyText mx={5} my={10} family="SemiBold" size={20} color={clr1}>
             Profile

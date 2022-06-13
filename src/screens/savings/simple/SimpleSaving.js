@@ -50,7 +50,7 @@ const SimpleSaving = ({navigation}) => {
 
   useEffect(() => {
     getGoldPrice();
-  }, []);
+  }, [getGoldPrice]);
 
   setInterval(() => {
     getGoldPrice();
@@ -73,6 +73,7 @@ const SimpleSaving = ({navigation}) => {
       );
       console.log(buy_gold);
       ToastAndroid.show('Transaction Successful', ToastAndroid.SHORT);
+      navigation.navigate('SimpleOverview');
     } catch (error) {
       console.log(error.response);
       ToastAndroid.show(error.message, ToastAndroid.SHORT);

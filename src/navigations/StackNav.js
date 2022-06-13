@@ -6,7 +6,13 @@ import Authenticated from './Authenticated';
 
 const StackNav = () => {
   // const [user, setUser] = useState(false);
-  const initialState = {user: false, id: null, access: null, refresh: null};
+  const initialState = {
+    user: false,
+    id: null,
+    access: null,
+    refresh: null,
+    name: '',
+  };
   const reducer = (state, action) => {
     console.log(state);
     switch (action.type) {
@@ -33,7 +39,7 @@ const StackNav = () => {
       if (access) {
         dispatch({type: 'setuser', access, id, refresh, user_id});
       }
-      await Storage.clear();
+      // await Storage.clear();
     };
     getUser();
   }, []);

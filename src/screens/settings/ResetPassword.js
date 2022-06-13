@@ -1,5 +1,5 @@
 import {View, TouchableOpacity, ToastAndroid} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import silly from '../../Silly/styles/silly';
 import {
   SillyView,
@@ -13,8 +13,11 @@ import OTP from '../../components/OTP';
 import axios from 'axios';
 import {server} from '../../config/server_url';
 import Storage from '@react-native-async-storage/async-storage';
+import AuthContext from '../../navigations/AuthContext';
 
 const ResetPassword = ({editPassword, setEditPassword}) => {
+  const {state} = useContext(AuthContext);
+  const {id} = state;
   const [reset, setReset] = useState({
     current: '',
     new: '',
@@ -25,10 +28,8 @@ const ResetPassword = ({editPassword, setEditPassword}) => {
       ToastAndroid.show('Fill out Empty fields', ToastAndroid.SHORT);
     }
     try {
-      const user_id = await Storage.getItem('user_id');
-      console.log(user_id);
       const update = await axios.post(`${server}/iam/auth/set-password/`, {
-        user_id,
+        id,
         reset: false,
         update: true,
         current_password: reset.current,
@@ -36,9 +37,10 @@ const ResetPassword = ({editPassword, setEditPassword}) => {
         confirm_password: reset.confirm_new,
       });
       console.log(update);
-      ToastAndroid.show(update.message, ToastAndroid.SHORT);
+      ToastAndroid.show('Password Updated', ToastAndroid.SHORT);
+      setEditPassword(false);
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   };

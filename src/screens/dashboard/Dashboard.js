@@ -20,7 +20,7 @@ const Dashboard = ({navigation}) => {
   return (
     <ScrollView style={styles.main}>
       <View style={styles.menuHolder}>
-        <View style={[silly.fr, silly.jcbtw, silly.aic]}>
+        {/* <View style={[silly.fr, silly.jcbtw, silly.aic]}>
           <Ionicons name="notifications-outline" color="white" size={30} />
           <TouchableOpacity onPress={() => navigation.navigate('Stories')}>
             <SillyView
@@ -38,7 +38,7 @@ const Dashboard = ({navigation}) => {
               </SillyView>
             </SillyView>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <Card />
       </View>
       <Savings />
@@ -53,14 +53,9 @@ const Dashboard = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  main: {
-    backgroundColor: 'rgb(240,240,240)',
-  },
   menuHolder: {
     paddingVertical: 20,
     paddingHorizontal: 10,
-    backgroundColor: 'rgb(49,34,122)',
-    height: height * 0.3,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
   },

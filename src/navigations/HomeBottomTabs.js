@@ -1,13 +1,12 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Dashboard from '../screens/dashboard/Dashboard';
-import Goals from '../screens/savings/Goals';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {StyleSheet} from 'react-native';
 import Learning from '../screens/learning/Learning';
-import SettingsNav from '../screens/settings/SettingsNav';
-import Profile from '../screens/Profile/Profile';
 import SavingsNav from '../screens/savings/SavingsNav';
+import ProfileNav from '../screens/Profile/ProfileNav';
+import {clr1} from '../config/globals';
 const Tab = createBottomTabNavigator();
 const HomeBottomTabs = () => {
   return (
@@ -40,18 +39,18 @@ const HomeBottomTabs = () => {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarStyle: {
-          backgroundColor: 'rgb(24,16,65)',
+          backgroundColor: 'white',
           paddingBottom: 5,
           height: 60,
         },
-        tabBarActiveTintColor: 'white',
+        tabBarActiveTintColor: clr1,
         tabBarInactiveTintColor: 'gray',
         headerShown: false,
       })}>
       <Tab.Screen name="Dashboard" component={Dashboard} />
       <Tab.Screen name="Money" component={SavingsNav} />
       <Tab.Screen name="Learning" component={Learning} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={ProfileNav} />
       {/* <Tab.Screen name="Settings" component={SettingsNav} /> */}
     </Tab.Navigator>
   );

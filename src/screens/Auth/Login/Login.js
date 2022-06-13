@@ -98,6 +98,7 @@ const Login = () => {
         mobile: login.mobile,
         verification_type: 'LOGIN',
       });
+
       ToastAndroid.show(otp.data.message, ToastAndroid.SHORT);
     } catch (error) {
       console.log(error);
@@ -129,8 +130,8 @@ const Login = () => {
       // navigation.navigate('OnBoarding');
       dispatch({type: 'signin'});
     } catch (error) {
-      console.log(error);
-      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      console.log(error.response);
+      ToastAndroid.show(error.response.data.detail, ToastAndroid.SHORT);
     }
   };
   return (

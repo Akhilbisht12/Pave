@@ -10,30 +10,34 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import silly from '../../../Silly/styles/silly';
 import Trends from './Trends';
 import {useNavigation} from '@react-navigation/native';
+import GoldBalance from './GoldBalance';
 
 const Savings = () => {
   const navigation = useNavigation();
   return (
-    <SillyView my={20} mx={10} px={15} py={20} bg={clr2}>
-      <View style={[silly.fr, silly.jcbtw, silly.aic]}>
-        <View>
-          <SillyText color={clr1} family="Bold" size={25}>
-            Start your savings
-          </SillyText>
-          <SillyText my={15} color={clr4}>
-            Choose your saving style and get started!
-          </SillyText>
+    <View>
+      {/* <SillyView my={20} mx={10} px={15} py={20} elev={2} bg={clr2}>
+        <View style={[silly.fr, silly.jcbtw, silly.aic]}>
+          <View>
+            <SillyText color={clr1} family="Bold" size={25}>
+              Start your savings
+            </SillyText>
+            <SillyText my={15} color={clr4}>
+              Choose your saving style and get started!
+            </SillyText>
+          </View>
+          <SillyButton
+            onPress={() => navigation.navigate('Money')}
+            bg={clr1}
+            round={10}
+            px={10}>
+            <Icon name="add" size={22} />
+          </SillyButton>
         </View>
-        <SillyButton
-          onPress={() => navigation.navigate('Money')}
-          bg={clr1}
-          round={10}
-          px={10}>
-          <Icon name="add" size={22} />
-        </SillyButton>
-      </View>
-      <Trends />
-    </SillyView>
+        <Trends />
+      </SillyView> */}
+      <GoldBalance />
+    </View>
   );
 };
 

@@ -18,18 +18,24 @@ import AuthContext from '../../../navigations/AuthContext';
 import moment from 'moment';
 import Storage from '@react-native-async-storage/async-storage';
 import curlirize from 'axios-curlirize';
-import fs from 'fs';
 
 const KYC = () => {
   curlirize(axios);
   const [step, setStep] = useState(1);
   const {dispatch} = useContext(AuthContext);
-  const [store, setStore] = useState({access: null, user_id: null});
+  const [store, setStore] = useState({
+    access: null,
+    user_id: null,
+    id: null,
+    refresh: null,
+  });
   useEffect(() => {
     const getAccess = async () => {
       const get_access = await Storage.getItem('access');
       const get_user = await Storage.getItem('user_id');
-      setStore({access: get_access, user_id: get_user});
+      const id = await Storage.getItem('id');
+      const refresh = await Storage.getItem('refresh');
+      setStore({access: get_access, user_id: get_user, id, refresh});
     };
     getAccess();
   }, []);
@@ -355,10 +361,11 @@ const KYC = () => {
         panFormData.append('user', store.user_id);
         panFormData.append('name', pan.name.toUpperCase());
         panFormData.append('number', pan.number);
-        panFormData.append(
-          'document',
-          fs.createReadStream(pan.panDoc.fileCopyUri),
-        );
+        panFormData.append('document', {
+          uri: pan.panDoc.uri,
+          type: pan.panDoc.type,
+          name: pan.panDoc.name,
+        });
         const panPost = await axios.post(
           `${server}/profile/create/pan/`,
           panFormData,
@@ -380,7 +387,13 @@ const KYC = () => {
         // });
         console.log(panPost.data);
         ToastAndroid.show('Pan Uploaded', ToastAndroid.SHORT);
-        dispatch({type: 'signin'});
+        dispatch({
+          type: 'setuser',
+          access: store.access,
+          id: store.id,
+          refresh: store.refresh,
+          user_id: store.user_id,
+        });
       } catch (error) {
         console.log(error.response);
         ToastAndroid.show(error.message, ToastAndroid.SHORT);

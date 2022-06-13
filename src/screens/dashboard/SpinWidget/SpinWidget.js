@@ -11,7 +11,7 @@ const SpinWidget = () => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Spin')}>
       <SillyView
-        py={20}
+        py={10}
         px={20}
         style={[silly.fr, silly.jcbtw, silly.aic]}
         round={5}

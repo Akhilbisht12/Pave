@@ -113,7 +113,6 @@ const Activity = () => {
           <SillyText my={6} family="SemiBold" color={clr4} size={22}>
             Learning Activity
           </SillyText>
-          <SillyText>last updated 2d ago</SillyText>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Learning')}>
           <SillyText family="SemiBold" size={18} color={clr1} mx={15}>

@@ -1,20 +1,25 @@
-import {View, FlatList, Dimensions} from 'react-native';
+import {View, FlatList, Dimensions, Image} from 'react-native';
 import React, {useState, useRef} from 'react';
 import {SillyView, SillyText} from '../../../Silly/components/silly_comps';
 import {clr1, clr2, clr4, sec_color} from '../../../config/globals';
 import silly from '../../../Silly/styles/silly';
+import img1 from '../../../assets/images/learn.png';
+import img2 from '../../../assets/images/learn_2.png';
 const {width} = Dimensions.get('window');
 const talks = [
   {
     index: 0,
+    img: img1,
     text: "After its recent $52 Mn fundraise, Licious a benguluru based startup that deals in meat became India's 1st D2C unicorn.",
   },
   {
     index: 1,
+    img: img2,
     text: "After its recent $52 Mn fundraise, Licious a benguluru based startup that deals in meat became India's 1st D2C unicorn.",
   },
   {
     index: 2,
+    img: img1,
     text: "After its recent $52 Mn fundraise, Licious a benguluru based startup that deals in meat became India's 1st D2C unicorn.",
   },
 ];
@@ -25,16 +30,23 @@ const MoneyTalks = () => {
   const renderTalks = ({item}) => {
     return (
       <View style={{width: width - 50}}>
-        <SillyText color={clr1} size={18} style={[silly.w60p]}>
-          {item.text}
-        </SillyText>
+        <View style={[silly.fr, silly.jcbtw]}>
+          <SillyText color={clr2} size={18} style={[silly.w60p]}>
+            {item.text}
+          </SillyText>
+          <Image
+            style={[silly.w30p, silly.h10p, silly.rmcon]}
+            source={item.img}
+          />
+        </View>
+
         <View style={[silly.fr, silly.my2]}>
           {talks.map((item, i) => {
             return (
               <View
                 key={i}
                 style={[
-                  silly.bg1,
+                  silly.bg2,
                   silly.ph,
                   silly.mx1,
                   silly.br10,
@@ -62,8 +74,8 @@ const MoneyTalks = () => {
         bg={sec_color}>
         <SillyText>1/2</SillyText>
       </SillyView> */}
-      <SillyView elev={2} px={15} my={0.01} bg={clr2}>
-        <SillyText size={22} color={clr1} my={10} family="SemiBold">
+      <SillyView elev={2} px={15} my={0.01} bg={clr1}>
+        <SillyText size={22} color={clr2} my={10} family="SemiBold">
           Money Talks
         </SillyText>
         <FlatList
