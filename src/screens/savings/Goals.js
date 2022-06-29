@@ -6,7 +6,7 @@ import {
   SillyView,
   SillyButton,
 } from '../../Silly/components/silly_comps';
-import {clr1, clr3, clr4} from '../../config/globals';
+import {clr1, clr3, clr4, clr5} from '../../config/globals';
 import savings_art from '../../assets/illustrations/savings.png';
 import axios from 'axios';
 import {server} from '../../config/server_url';
@@ -23,7 +23,7 @@ const Goals = ({navigation}) => {
       console.log(investmentreq.data);
       investmentreq.data.count > 0
         ? navigation.navigate('SimpleOverview')
-        : navigation.navigate('AddSaving');
+        : navigation.navigate('AddSaving', {overview: false});
     } catch (error) {
       console.log(error.response);
     }
@@ -38,7 +38,7 @@ const Goals = ({navigation}) => {
           </SillyText>
         </View>
         <View style={[silly.my3]}>
-          <TouchableOpacity onPress={() => navigation.navigate('AddGoal')}>
+          <TouchableOpacity>
             <SillyView
               my={5}
               mx={10}
@@ -51,6 +51,9 @@ const Goals = ({navigation}) => {
                 silly.bg2,
               ]}>
               <View>
+                <SillyText style={[silly.mb1]} size={18} color={clr5}>
+                  COMING SOON!
+                </SillyText>
                 <SillyText
                   style={[silly.mb1]}
                   family="SemiBold"

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "752514524635",
+    "project_id": "pave-notifications",
+    "storage_bucket": "pave-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752514524635:android:7bc23b6be66a7a8087f3fe",
+        "android_client_info": {
+          "package_name": "com.pave"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752514524635-0n39flk8g4l6aabh7gq1o7mmksv3tr75.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaEYEGuWpOByD1nj0tzZDYz6kwgFuvwJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752514524635-0n39flk8g4l6aabh7gq1o7mmksv3tr75.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

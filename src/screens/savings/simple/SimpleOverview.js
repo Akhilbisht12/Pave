@@ -21,7 +21,7 @@ import moment from 'moment';
 const SimpleOverview = ({navigation}) => {
   const [trans, setTrans] = useState(false);
   const [investments, setInvestments] = useState([]);
-  const [totalIn, setTotalIn] = useState([]);
+  const [totalIn, setTotalIn] = useState({net: '', net_amount: ''});
   const [boost, setBoost] = useState(false);
   const [withdraw, setWithdraw] = useState(false);
   const {size, strokeWidth} = {size: 60, strokeWidth: 5};
@@ -74,9 +74,9 @@ const SimpleOverview = ({navigation}) => {
               mx={10}
               py={10}>
               <SillyText mx={5} size={18} color={clr2}>
-                Earn
+                ₹{totalIn.net_amount}
               </SillyText>
-              <Icon color={'yellow'} name="star" size={20} />
+              {/* <Icon color={'yellow'} name="star" size={20} /> */}
             </SillyView>
           </View>
           <View style={[silly.fr]}>
@@ -92,7 +92,7 @@ const SimpleOverview = ({navigation}) => {
             </SillyView>
           </View>
 
-          <SillyView
+          {/* <SillyView
             style={[silly.fr, silly.jcbtw, silly.aic]}
             px={15}
             bg={sec_color}>
@@ -111,9 +111,9 @@ const SimpleOverview = ({navigation}) => {
                 You're on track to reach your milestone earlier
               </SillyText>
             </View>
-          </SillyView>
+          </SillyView> */}
           {/* streak section */}
-          <View style={[silly.fr, silly.aic, silly.jcbtw]}>
+          {/* <View style={[silly.fr, silly.aic, silly.jcbtw]}>
             <SillyView
               style={[silly.fr, silly.jcbtw, silly.aic, silly.w60p, silly.h15p]}
               px={10}
@@ -121,7 +121,6 @@ const SimpleOverview = ({navigation}) => {
               <View style={[silly.fr, silly.aic]}>
                 <View>
                   <Svg width={size} height={size}>
-                    {/* Background Circle */}
                     <Circle
                       stroke={'#f2f2f2'}
                       fill="none"
@@ -131,7 +130,6 @@ const SimpleOverview = ({navigation}) => {
                       {...{strokeWidth}}
                     />
 
-                    {/* Progress Circle */}
                     <Circle
                       stroke={'#3b5998'}
                       fill="none"
@@ -147,7 +145,6 @@ const SimpleOverview = ({navigation}) => {
                       {...{strokeWidth}}
                     />
 
-                    {/* Text */}
                     <SvgText
                       fontSize={18}
                       x={size / 2}
@@ -181,7 +178,7 @@ const SimpleOverview = ({navigation}) => {
               </SillyText>
               <SillyText my={5}>won in rewards so far!</SillyText>
             </SillyView>
-          </View>
+          </View> */}
 
           <SillyButton
             onPress={() => setWithdraw(true)}
@@ -197,7 +194,7 @@ const SimpleOverview = ({navigation}) => {
           my={0.01}
           round={15}
           bg={clr2}
-          style={[silly.f1, silly.h40p]}>
+          style={[silly.f1, silly.h60p]}>
           <TouchableOpacity onPress={() => setBoost(true)}>
             <SillyView bg={clr1}>
               <SillyText my={10} size={22} family="SemiBold">
@@ -220,7 +217,7 @@ const SimpleOverview = ({navigation}) => {
             </View>
             <SillyView bg={clr5} py={0.4} />
             <View style={[silly.f1]}>
-              {investments.slice(0, 2).map((item, i) => {
+              {investments.slice(0, 4).map((item, i) => {
                 return (
                   <View
                     style={[silly.fr, silly.jcbtw, silly.aic, silly.my1]}
@@ -251,7 +248,7 @@ const SimpleOverview = ({navigation}) => {
       </ScrollView>
       <View style={[silly.aic]}>
         <SillyButton
-          onPress={() => navigation.navigate('AddSaving')}
+          onPress={() => navigation.navigate('AddSaving', {overview: true})}
           style={[silly.w90p]}
           bg={clr1}>
           <SillyText center color={clr2} family="SemiBold" size={22}>

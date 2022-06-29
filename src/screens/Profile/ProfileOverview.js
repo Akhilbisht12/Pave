@@ -19,23 +19,24 @@ import {server} from '../../config/server_url';
 const ProfileOverview = () => {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState(0);
-  const GetActiveTab = () => {
-    switch (activeTab) {
-      case 0:
-        return <Badges />;
-      case 1:
-        return <Points />;
-      case 2:
-        return <Friends />;
-      default:
-        setActiveTab(0);
-        break;
-    }
-  };
+
   const [name, setName] = useState('');
   const {state} = useContext(AuthContext);
   const {user_id} = state;
-
+  const [earnings, setEarnings] = useState({badges: [], points: 0});
+  useEffect(() => {
+    const pointsreq = async () => {
+      try {
+        const pointsres = await axios.get(
+          `${server}/earning/overview/${user_id}/`,
+        );
+        setEarnings(pointsres.data);
+      } catch (error) {
+        console.log(error.response);
+      }
+    };
+    pointsreq();
+  }, [user_id]);
   useEffect(() => {
     const getUserProfile = async () => {
       try {
@@ -48,6 +49,19 @@ const ProfileOverview = () => {
     };
     getUserProfile();
   }, [user_id]);
+  const GetActiveTab = () => {
+    switch (activeTab) {
+      case 0:
+        return <Badges badges={earnings.badges} />;
+      case 1:
+        return <Points />;
+      case 2:
+        return <Friends />;
+      default:
+        setActiveTab(0);
+        break;
+    }
+  };
   return (
     <View style={[silly.f1, silly.bg1]}>
       <View style={[silly.p1]}>
@@ -58,7 +72,7 @@ const ProfileOverview = () => {
             <Image
               style={[silly.w40, silly.h40, silly.br20]}
               source={{
-                uri: 'https://cdn.pixabay.com/photo/2022/03/16/06/18/bird-7071662_960_720.jpg',
+                uri: 'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/user.png',
               }}
             />
             <SillyText mx={10} family="SemiBold" size={22}>
@@ -77,38 +91,23 @@ const ProfileOverview = () => {
           style={[silly.fr, silly.jcbtw, silly.aic]}>
           <View style={[silly.aic]}>
             <Icon name="medal-outline" size={25} />
-            <SillyText
-              my={5}
-              center
-              style={[silly.w20p]}
-              size={18}
-              family="SemiBold">
-              20 Badges Earned
+            <SillyText my={5} center style={[silly.w20p]} family="SemiBold">
+              {earnings.badges.length} Badges Earned
             </SillyText>
           </View>
           <SillyView bg={clr5} style={[silly.h80]} px={0.4} />
 
           <View style={[silly.aic]}>
             <Icon name="star-outline" size={25} />
-            <SillyText
-              my={5}
-              center
-              style={[silly.w20p]}
-              size={18}
-              family="SemiBold">
-              500 Points Earned
+            <SillyText my={5} center style={[silly.w20p]} family="SemiBold">
+              {earnings.points} Points Earned
             </SillyText>
           </View>
           <SillyView bg={clr5} style={[silly.h80]} px={0.4} />
           <View style={[silly.aic]}>
             <Icon name="people-outline" size={25} />
 
-            <SillyText
-              my={5}
-              center
-              style={[silly.w20p]}
-              size={18}
-              family="SemiBold">
+            <SillyText my={5} center style={[silly.w20p]} family="SemiBold">
               4 Friends Added
             </SillyText>
           </View>

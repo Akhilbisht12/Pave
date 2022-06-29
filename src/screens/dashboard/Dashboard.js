@@ -18,7 +18,7 @@ import MoneyTalks from './MoneyTalks/MoneyTalks';
 const {height} = Dimensions.get('window');
 const Dashboard = ({navigation}) => {
   return (
-    <ScrollView style={styles.main}>
+    <ScrollView style={[silly.bg2]}>
       <View style={styles.menuHolder}>
         {/* <View style={[silly.fr, silly.jcbtw, silly.aic]}>
           <Ionicons name="notifications-outline" color="white" size={30} />

@@ -1,4 +1,11 @@
-import {View, Animated, PanResponder, Dimensions, Image} from 'react-native';
+import {
+  View,
+  Animated,
+  PanResponder,
+  Dimensions,
+  Image,
+  ScrollView,
+} from 'react-native';
 import React, {useRef} from 'react';
 import silly from '../../../Silly/styles/silly';
 import quesImg from '../../../assets/images/ques.png';
@@ -78,19 +85,21 @@ const Cards = ({ques, quesIndex, setQuesIndex}) => {
               },
               silly.h15p,
               silly.br10,
-              {resizeMode: 'cover'},
+              silly.rmcon,
             ]}
-            source={quesImg}
+            source={item.chapter_image ? {uri: item.chapter_image} : quesImg}
           />
-          <View style={[silly.p2]}>
-            <SillyText color={clr1} size={40} family="SemiBold">
-              {item.ques}
+          <View style={[silly.p2, silly.h50p]}>
+            <SillyText color={clr1} size={25} family="SemiBold">
+              {item.title}
             </SillyText>
-            <SillyText color={clr4} my={20} size={16}>
-              {item.ans}
-            </SillyText>
+            <ScrollView nestedScrollEnabled style={[silly.h30p]}>
+              <SillyText color={clr4} my={10} size={14}>
+                {item.content}
+              </SillyText>
+            </ScrollView>
           </View>
-          <View style={[silly.px2, silly.mb5]}>
+          {/* <View style={[silly.px2, silly.mb5]}>
             <SillyButton
               round={15}
               py={1}
@@ -107,7 +116,7 @@ const Cards = ({ques, quesIndex, setQuesIndex}) => {
                 Bonus tip goes here
               </SillyText>
             </SillyButton>
-          </View>
+          </View> */}
         </View>
       </Animated.View>
     );

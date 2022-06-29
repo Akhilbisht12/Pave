@@ -6,7 +6,7 @@ import {
   SillyButton,
   SillyView,
 } from '../../../Silly/components/silly_comps';
-import {clr1, clr2, sec_clr_opac} from '../../../config/globals';
+import {clr1, clr2, clr4, sec_clr_opac} from '../../../config/globals';
 import silly from '../../../Silly/styles/silly';
 import {Circle, Svg, Text as SvgText} from 'react-native-svg';
 import {useEffect} from 'react';
@@ -15,28 +15,25 @@ import axios from 'axios';
 import {server} from '../../../config/server_url';
 import {useContext} from 'react';
 import AuthContext from '../../../navigations/AuthContext';
+import {useNavigation} from '@react-navigation/native';
 
 const GoldBalance = () => {
+  const navigation = useNavigation();
   const {state} = useContext(AuthContext);
   const {user_id} = state;
   const {size, strokeWidth} = {size: 45, strokeWidth: 2};
   const radius = (size - strokeWidth) / 2;
   const circum = radius * 2 * Math.PI;
   const svgProgress = 100 - 10;
-  const [gold_price, set_gold_price] = useState({gold_sell: 0, id: ''});
 
-  const [inves, setInves] = useState({});
+  const [inves, setInves] = useState({net: '', net_amount: ''});
   useEffect(() => {
     const getGoldPrice = async () => {
       try {
-        const get_gold = await axios.get(
-          `${server}/investment/precious-metal/rates/`,
-        );
         const totalInvestres = await axios.get(
           `${server}/investment/precious-metal/${user_id}/investment-overview/`,
         );
         setInves(totalInvestres.data);
-        set_gold_price(get_gold.data);
       } catch (error) {
         console.log(error.response.data);
         ToastAndroid.show(error.message, ToastAndroid.SHORT);
@@ -56,14 +53,17 @@ const GoldBalance = () => {
         <SillyText family="SemiBold" size={30} color={'orange'}>
           {inves.net} gms
         </SillyText>
-        <SillyText color={'orange'}>
-          Invested in 24K | 99.95 % Pure Gold
-        </SillyText>
+        <SillyText color={clr4}>Invested in 24K | 99.95 % Pure Gold</SillyText>
         <View style={[silly.fr, silly.jcbtw, silly.aic]}>
-          <SillyText my={6} size={22} color={'green'}>
-            ≈ ₹ {parseFloat(inves.net * gold_price.gold_sell).toFixed(2)}
+          <SillyText my={6} size={22} color={clr4}>
+            ≈ ₹{inves.net_amount}
           </SillyText>
-          <SillyButton my={0.01} bg={clr1} px={4} py={4}>
+          <SillyButton
+            onPress={() => navigation.navigate('AddSaving', {overview: false})}
+            my={0.01}
+            bg={clr1}
+            px={4}
+            py={4}>
             <Icon name="add-outline" color={clr2} size={25} />
           </SillyButton>
         </View>
@@ -78,14 +78,13 @@ const GoldBalance = () => {
         <View style={[silly.fr, silly.aic, silly.jcbtw]}>
           <View>
             <SillyText family="SemiBold" size={22} color={'orange'}>
-              Travel Goal
+              Plan a Goal
             </SillyText>
-            <SillyText color={'green'}>3 Month Goal</SillyText>
+            <SillyText color={clr4}>Choose time limit</SillyText>
           </View>
 
-          <View>
+          {/* <View>
             <Svg width={size} height={size}>
-              {/* Background Circle */}
               <Circle
                 stroke={clr1}
                 fill="none"
@@ -95,7 +94,6 @@ const GoldBalance = () => {
                 {...{strokeWidth}}
               />
 
-              {/* Progress Circle */}
               <Circle
                 stroke={clr2}
                 fill="none"
@@ -109,7 +107,6 @@ const GoldBalance = () => {
                 {...{strokeWidth}}
               />
 
-              {/* Text */}
               <SvgText
                 fontSize={16}
                 x={size / 2}
@@ -119,21 +116,20 @@ const GoldBalance = () => {
                 {'90%'}
               </SvgText>
             </Svg>
-          </View>
+          </View> */}
         </View>
 
         <View style={[silly.aic, silly.fr]}>
-          <Icon name={'arrow-up-outline'} size={18} color={'#B20600'} />
-          <SillyText color={'#B20600'}>Investing lower than usual</SillyText>
-        </View>
-        <View style={[silly.fr, silly.jcbtw, silly.aic]}>
-          <SillyText my={6} size={22} color={'green'}>
-            ₹ 7895 saved
+          <Icon name={'arrow-up-outline'} size={18} color={'green'} />
+          <SillyText size={12} color={'green'}>
+            Get Progress Trends
           </SillyText>
-          <SillyButton my={0.01} bg={clr1} px={4} py={4}>
-            <Icon name="add-outline" color={clr2} size={25} />
-          </SillyButton>
         </View>
+        <SillyButton my={3} bg={clr1} px={4} py={2}>
+          <SillyText center my={2} size={16}>
+            Coming Soon!
+          </SillyText>
+        </SillyButton>
       </SillyView>
     </View>
   );

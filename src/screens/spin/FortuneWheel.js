@@ -1,5 +1,11 @@
-import {View, Dimensions, TouchableOpacity, Animated} from 'react-native';
-import React, {useRef, useEffect} from 'react';
+import {
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Animated,
+  ToastAndroid,
+} from 'react-native';
+import React, {useRef, useEffect, useState} from 'react';
 import * as d3Shape from 'd3-shape';
 import {Svg, G, Path, Text, TSpan} from 'react-native-svg';
 import {snap} from '@popmotion/popcorn';
@@ -8,6 +14,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import silly from '../../Silly/styles/silly';
 import {clr1} from '../../config/globals';
 import Sound from 'react-native-sound';
+import {server} from '../../config/server_url';
+import axios from 'axios';
 const {width} = Dimensions.get('window');
 const wheelSize = width * 1.8;
 Sound.setCategory('Playback');
@@ -17,7 +25,7 @@ const FortuneWheel = ({spinType, fortunes}) => {
   const winnerSound = new Sound('winner.wav', Sound.MAIN_BUNDLE);
   const angleBySegment = 360 / fortunes.length;
   const angleOffSet = angleBySegment / 2;
-  const rotate = useRef(new Animated.Value(-angleOffSet)).current;
+  const rotate = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     console.log('rotate' + rotate._value);
   }, [rotate]);
@@ -31,50 +39,55 @@ const FortuneWheel = ({spinType, fortunes}) => {
         .padAngle(0.01)
         .outerRadius(width / 2)
         .innerRadius(20);
-
       return {
         path: instance(arc),
-        color: spinType
-          ? index % 2 === 0
-            ? clr1
-            : '#5b5f97'
-          : fortunes[index].color,
-        value: fortunes[index].prize,
+        color: index % 2 === 0 ? clr1 : '#5b5f97',
+        value: fortunes[index].name,
         centroid: instance.centroid(arc),
       };
     });
   };
-  const getWinner = () => {
-    const deg = Math.abs(Math.round(rotate._value % 360));
-    const winner = Math.floor((360 - deg) / angleBySegment);
-    console.log(makeWheel()[winner === fortunes.length ? 0 : winner].value);
-    return winner;
+
+  const getWinner = async () => {
+    try {
+      const winnerres = await axios.post(`${server}/earning/spin-wheel/`);
+      const winner_index = fortunes.findIndex(
+        item => item.name === winnerres.data.name,
+      );
+      console.log(winnerres.data.name, fortunes[winner_index]);
+      return winner_index;
+    } catch (error) {
+      console.log(error.response);
+      ToastAndroid.show('Failed to spin. Please try again', ToastAndroid.SHORT);
+      return null;
+    }
   };
-  const spinWheel = () => {
-    whoosh.play(success => {
-      if (success) {
-        console.log('successfully played');
-      } else {
-        console.log('failed to play');
-      }
-    });
-    Animated.decay(rotate, {
-      velocity: 1,
-      deceleration: 0.999,
-      useNativeDriver: false,
-    }).start(() => {
-      whoosh.stop();
-      winnerSound.play();
-      console.log(rotate._value);
-      rotate.setValue(rotate._value % 360);
-      const snapTo = snap(angleBySegment);
+  const spinWheel = async () => {
+    rotate.setValue(0);
+    await getWinner().then(res => {
+      console.log(res + 'winner');
+      whoosh.play(success => {
+        if (success) {
+          console.log('successfully played');
+        } else {
+          console.log('failed to play sound');
+        }
+      });
       Animated.timing(rotate, {
-        toValue: snapTo(rotate._value),
-        duration: 300,
+        toValue: 9 - res,
+        duration: 4000,
         useNativeDriver: false,
       }).start(() => {
-        winnerSound.stop();
-        getWinner();
+        whoosh.stop();
+        winnerSound.play();
+        // const snapTo = snap(angleBySegment);
+        // Animated.timing(rotate, {
+        //   toValue: snapTo(rotate._value),
+        //   duration: 300,
+        //   useNativeDriver: false,
+        // }).start(() => {
+        //   winnerSound.stop();
+        // });
       });
     });
   };
@@ -93,8 +106,18 @@ const FortuneWheel = ({spinType, fortunes}) => {
             transform: [
               {
                 rotate: rotate.interpolate({
-                  inputRange: [-360, 0, 360],
-                  outputRange: ['-360deg', '0deg', '360deg'],
+                  inputRange: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                  outputRange: [
+                    '0deg',
+                    '720deg',
+                    '765deg',
+                    '810deg',
+                    '855deg',
+                    '900deg',
+                    '945deg',
+                    '990deg',
+                    '1035deg',
+                  ],
                 }),
               },
             ],
@@ -119,32 +142,20 @@ const FortuneWheel = ({spinType, fortunes}) => {
                       originX={x}
                       originY={y}
                       rotation={angleOffSet + (i * 360) / fortunes.length}>
-                      {fortunes[i].prize === '0' ? (
-                        <Text
-                          fontFamily="Outfit-SemiBold"
-                          x={x}
-                          y={y - 10}
-                          fill={i % 2 === 0 ? 'white' : clr1}
-                          textAnchor="middle"
-                          fontSize={26}>
-                          <TSpan x={x} y={y - 20}>
-                            Better luck
-                          </TSpan>
-                          <TSpan x={x} y={y + 10}>
-                            next time
-                          </TSpan>
-                        </Text>
-                      ) : (
-                        <Text
-                          fontFamily="Outfit-SemiBold"
-                          x={x}
-                          y={y - 10}
-                          fill={i % 2 === 0 ? 'white' : 'white'}
-                          textAnchor="middle"
-                          fontSize={26}>
-                          {'₹ ' + fortunes[i].prize.toString()}
-                        </Text>
-                      )}
+                      {fortunes[i].name.split(' ').map((word, i) => {
+                        return (
+                          <Text
+                            key={i}
+                            fontFamily="Outfit-SemiBold"
+                            x={x}
+                            y={y - 60 + i * 20}
+                            fill={i % 2 === 0 ? 'white' : 'white'}
+                            textAnchor="middle"
+                            fontSize={14}>
+                            {word}
+                          </Text>
+                        );
+                      })}
                     </G>
                   </G>
                 );

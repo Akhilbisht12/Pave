@@ -1,66 +1,57 @@
-import {TouchableOpacity, View} from 'react-native';
+import {ToastAndroid, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import silly from '../../../Silly/styles/silly';
 import SillyText from '../../../Silly/components/SillyText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Progress from './Progress';
 import Cards from './Cards';
 import SillyButton from '../../../Silly/components/SillyButton';
 import {clr1, clr2} from '../../../config/globals';
-const Learn = ({navigation}) => {
-  const ques = [
-    {
-      id: 1,
-      ques: 'What is a mutual fund?',
-      ans: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
-      tip: 'first tip',
-    },
-    {
-      id: 2,
-      ques: 'Why mutual fund?',
-      ans: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
-      tip: 'second tip',
-    },
-    {
-      id: 3,
-      ques: 'What risks are involved?',
-      ans: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
-      tip: 'third tip',
-    },
-  ];
-  const [quesIndex, setQuesIndex] = useState(ques.length - 1);
+import {useEffect} from 'react';
+import axios from 'axios';
+import {server} from '../../../config/server_url';
+
+const Learn = ({navigation, route}) => {
+  const [chaps, setChaps] = useState([]);
+  const [module_info, setModule_info] = useState({name: '', description: ''});
+  const [quesIndex, setQuesIndex] = useState(chaps.length + 1);
+  const module_id = route.params.id;
+  useEffect(() => {
+    const getChaps = async () => {
+      try {
+        const chapsres = await axios.get(
+          `${server}/learning/module/${module_id}/`,
+        );
+        setChaps(chapsres.data.chapters);
+        console.log(chapsres.data);
+        setModule_info({
+          name: chapsres.data.name,
+          description: chapsres.data.description,
+        });
+      } catch (error) {
+        ToastAndroid.show('Failed getting chapters', ToastAndroid.SHORT);
+        console.log(error.response);
+      }
+    };
+    getChaps();
+  }, [module_id]);
   return (
     <View style={[silly.bg1, silly.f1, silly.jcaround, silly.p1]}>
       <View style={[silly.ais, silly.p1]}>
         <SillyText size={32} family="Medium">
-          Mutual Funds 101
+          {module_info.name}
         </SillyText>
-        {/* header */}
-        <View
-          style={[
-            silly.pyh,
-            silly.br10,
-            silly.bw1,
-            silly.bc2,
-            silly.fr,
-            silly.aic,
-            silly.my1,
-            silly.px3,
-          ]}>
-          <Ionicons name="star" color="orange" size={22} />
-          <SillyText mx={5} size={16}>
-            10/30 Points earned
-          </SillyText>
-        </View>
-        {/* progress */}
-
+        <SillyText>{module_info.description}</SillyText>
         <View style={[silly.w60p, silly.bg5, silly.bg5, silly.my1, silly.br5]}>
           <View style={[silly.w20p, silly.h5, silly.bg2, silly.br5]} />
         </View>
       </View>
-      <Cards ques={ques} quesIndex={quesIndex} setQuesIndex={setQuesIndex} />
+      <Cards
+        ques={[...chaps]}
+        quesIndex={quesIndex}
+        setQuesIndex={setQuesIndex}
+      />
       <View style={[silly.fr, silly.jcbtw, silly.aic, silly.px1]}>
-        {quesIndex === ques.length - 1 ? (
+        {quesIndex === chaps.length - 1 ? (
           <View />
         ) : (
           <SillyButton
@@ -74,9 +65,14 @@ const Learn = ({navigation}) => {
           </SillyButton>
         )}
 
-        {quesIndex + ques.length === ques.length ? (
+        {quesIndex + chaps.length === chaps.length ? (
           <SillyButton
-            onPress={() => navigation.navigate('QuizIndex')}
+            onPress={() =>
+              navigation.navigate('QuizIndex', {
+                module: module_id,
+                info: module_info,
+              })
+            }
             py={18}
             px={silly.w40p}
             bg={clr2}>

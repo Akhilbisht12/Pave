@@ -6,3 +6,4 @@ exports.clr2 = '#ffffff';
 exports.clr3 = 'lightgray';
 exports.clr4 = 'black';
 exports.clr5 = '#828282';
+exports.cashfree_api = '176734c64898af5ec9f088dc13437671';

@@ -122,16 +122,21 @@ const Login = () => {
         '#otp': otp,
         password: login.password,
       });
-      console.log(loginreq);
+      console.log(loginreq.data);
       await Storage.setItem('refresh', loginreq.data.refresh);
       await Storage.setItem('access', loginreq.data.access);
       await Storage.setItem('user_id', loginreq.data.user_id);
       await Storage.setItem('id', loginreq.data.id);
-      // navigation.navigate('OnBoarding');
-      dispatch({type: 'signin'});
+      dispatch({
+        type: 'setuser',
+        access: loginreq.data.access,
+        id: loginreq.data.id,
+        refresh: loginreq.data.refresh,
+        user_id: loginreq.data.user_id,
+      });
     } catch (error) {
       console.log(error.response);
-      ToastAndroid.show(error.response.data.detail, ToastAndroid.SHORT);
+      ToastAndroid.show('Login request failed', ToastAndroid.SHORT);
     }
   };
   return (
@@ -194,6 +199,14 @@ const Login = () => {
         <SillyButton onPress={handleLogin} py={15} bg={clr1}>
           <SillyText color={clr2} center size={18}>
             Login
+          </SillyText>
+        </SillyButton>
+        <SillyButton
+          bg={'transparent'}
+          onPress={() => navigation.navigate('Forgot')}
+          my={20}>
+          <SillyText color={clr1} center size={18}>
+            Forgot Password ? Click here
           </SillyText>
         </SillyButton>
       </SillyView>

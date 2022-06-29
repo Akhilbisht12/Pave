@@ -3,6 +3,7 @@ import Storage from '@react-native-async-storage/async-storage';
 import AuthContext from './AuthContext';
 import Unauthenticated from './Unauthenticated';
 import Authenticated from './Authenticated';
+import silly from '../Silly/styles/silly';
 
 const StackNav = () => {
   // const [user, setUser] = useState(false);
@@ -14,15 +15,16 @@ const StackNav = () => {
     name: '',
   };
   const reducer = (state, action) => {
-    console.log(state);
     switch (action.type) {
       case 'signin':
         return {user: true};
-      case 'signout':
-        return {user: false};
       case 'setuser': {
         const {access, id, refresh, user_id} = action;
         return {user: true, access, id, refresh, user_id};
+      }
+      case 'logout': {
+        Storage.clear();
+        return initialState;
       }
       default:
         return state;

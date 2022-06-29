@@ -12,6 +12,8 @@
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
     "@react-native-async-storage/async-storage": "^1.17.3",
+    "@react-native-firebase/app": "^14.11.0",
+    "@react-native-firebase/messaging": "^14.11.0",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
@@ -24,6 +26,7 @@
     "react-native-date-picker": "^4.2.1",
     "react-native-document-picker": "^8.1.0",
     "react-native-file-viewer": "^2.1.5",
+    "react-native-pg-react-native-sdk": "^2.1.8",
     "react-native-safe-area-context": "^4.2.5",
     "react-native-screens": "^3.13.1",
     "react-native-sound": "^0.11.2",

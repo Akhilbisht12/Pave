@@ -1,16 +1,11 @@
 import {View, TouchableOpacity, Animated, Dimensions} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import silly from '../../Silly/styles/silly';
-import {
-  SillyText,
-  SillyView,
-  SillyButton,
-} from '../../Silly/components/silly_comps';
-import {clr1, clr2, clr3} from '../../config/globals';
+import {SillyText, SillyView} from '../../Silly/components/silly_comps';
+import {clr1, clr3} from '../../config/globals';
 import DailySpin from './DailySpin';
 import AnimControl from '../../utils/AnimControl';
 import WeeklySpin from './WeeklySpin';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 const {width} = Dimensions.get('window');
 const Spin = () => {
   const [spinType, setSpinType] = useState(true);
@@ -31,7 +26,7 @@ const Spin = () => {
       <SillyText my={10} color={clr1} size={30} family="Bold">
         Try Your Luck
       </SillyText>
-      <SillyView mx={0.1} px={0.01} bg="transparent" style={[silly.fr]}>
+      {/* <SillyView mx={0.1} px={0.01} bg="transparent" style={[silly.fr]}>
         <TouchableOpacity
           onPress={() => setSpinType(true)}
           style={[
@@ -46,11 +41,10 @@ const Spin = () => {
             YOUR GAME
           </SillyText>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => setSpinType(false)}
           style={[
             silly.w50p,
-            spinType ? silly.bg1 : silly.bg3,
             {
               borderTopRightRadius: 5,
               borderBottomRightRadius: 5,
@@ -61,7 +55,7 @@ const Spin = () => {
             WEEKLY GAME
           </SillyText>
         </TouchableOpacity>
-      </SillyView>
+      </SillyView> */}
       {/* spin sections */}
       <Animated.View
         style={[
@@ -73,22 +67,14 @@ const Spin = () => {
         ]}>
         <DailySpin />
       </Animated.View>
-      <Animated.View
+      {/* <Animated.View
         style={[
           silly.f1,
           spinType ? silly.dn : silly.df,
           {transform: [{translateX: weekly}]},
         ]}>
-        <WeeklySpin />
-      </Animated.View>
-      {/* <View style={[silly.aic]}>
-        <SillyButton round={25} bg={clr2}>
-          <View style={[silly.fr, silly.aic]}>
-            <SillyText color={clr1}>Close</SillyText>
-            <Ionicons color={clr1} name="close-outline" size={18} />
-          </View>
-        </SillyButton>
-      </View> */}
+         <WeeklySpin />
+      </Animated.View> */}
     </View>
   );
 };

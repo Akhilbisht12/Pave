@@ -32,11 +32,14 @@ const Profile = ({navigation}) => {
             </SillyText>
             <Icon size={25} name="create-outline" color={clr1} />
           </View>
-          <SillyView style={[silly.fr, silly.jcbtw]} py={10} round={10}>
+          <SillyView
+            style={[silly.fr, silly.jcbtw, silly.aic]}
+            py={10}
+            round={10}>
             <Image
-              style={[silly.w40, silly.h40, silly.br20]}
+              style={[silly.w50, silly.h50, silly.br20, silly.rmcov]}
               source={{
-                uri: 'https://cdn.pixabay.com/photo/2022/02/26/07/06/butterfly-7035308_960_720.jpg',
+                uri: 'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/user.png',
               }}
             />
             <SillyButton px={0.1}>

@@ -8,12 +8,16 @@ import {
   SillyView,
   SillyButton,
 } from '../../../Silly/components/silly_comps';
-import quizImage from '../../../assets/images/quiz.png';
-const QuizIndex = ({navigation}) => {
+import quizImage from '../../../assets/illustrations/quiz_comp.png';
+const QuizIndex = ({navigation, route}) => {
+  const {module, info} = route.params;
   return (
     <View style={[silly.f1, silly.bg1, silly.aic, silly.jce]}>
       <View style={[silly.aic]}>
-        <Image source={quizImage} style={[silly.w90p]} />
+        <Image
+          source={quizImage}
+          style={[silly.w90p, silly.rmcon, silly.h40p]}
+        />
         <SillyText size={30} my={20} color="orange" family="SemiBold">
           Congratulations
         </SillyText>
@@ -25,8 +29,8 @@ const QuizIndex = ({navigation}) => {
           style={[silly.w90p]}
           bg={clr2}>
           <SillyView round={5} bg="orange" mx={0.01} my={0.01}>
-            <SillyText my={10} color={clr2} family="Medium" size={24}>
-              Mutual Funds 101
+            <SillyText my={5} color={clr2} family="SemiBold" size={20}>
+              {info.name}
             </SillyText>
           </SillyView>
           <View style={[silly.px2, silly.py1]}>
@@ -49,13 +53,15 @@ const QuizIndex = ({navigation}) => {
         </SillyView>
       </View>
       <View style={[silly.fr, silly.jcbtw, silly.aic, silly.my3]}>
-        <SillyButton style={[silly.w40p]}>
+        <SillyButton
+          onPress={() => navigation.navigate('Learning')}
+          style={[silly.w40p]}>
           <SillyText size={16} family="SemiBold" center>
             Maybe Later
           </SillyText>
         </SillyButton>
         <SillyButton
-          onPress={() => navigation.navigate('ModuleQuiz')}
+          onPress={() => navigation.navigate('QuizList', {module})}
           py={15}
           style={[silly.w40p]}
           bg={clr2}>

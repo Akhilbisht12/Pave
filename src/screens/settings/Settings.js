@@ -1,5 +1,5 @@
 import {View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   SillyText,
   SillyView,
@@ -11,10 +11,12 @@ import {clr1, clr3, clr4, clr5} from '../../config/globals';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Notifications from './Notifications';
 import Privacy from './Privacy';
+import AuthContext from '../../navigations/AuthContext';
 
 const Settings = ({navigation}) => {
   const [editNot, setEditNot] = useState(false);
   const [editPri, setEditPri] = useState(false);
+  const {dispatch} = useContext(AuthContext);
   return (
     <View style={[silly.p1, silly.f1]}>
       <View style={[silly.fr, silly.aic]}>
@@ -91,7 +93,11 @@ const Settings = ({navigation}) => {
             About us
           </SillyText>
         </SillyButton>
-        <SillyButton py={15} style={[silly.fr, silly.aic]} bg="#25195E40">
+        <SillyButton
+          onPress={() => dispatch({type: 'logout'})}
+          py={15}
+          style={[silly.fr, silly.aic]}
+          bg="#25195E40">
           <Icon size={20} color={clr1} name="log-out-outline" />
 
           <SillyText

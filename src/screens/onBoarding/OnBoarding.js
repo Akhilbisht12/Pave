@@ -3,22 +3,22 @@ import React, {useRef, useState} from 'react';
 import silly from '../../Silly/styles/silly';
 import SillyText from '../../Silly/components/SillyText';
 import SillyButton from '../../Silly/components/SillyButton';
-import globals from '../../config/globals';
+import globals, {clr1, clr2} from '../../config/globals';
 const OnBoarding = ({navigation}) => {
   const ob_data = [
     {
       id: 0,
-      imageUri: require('../../assets/images/ob1.png'),
+      imageUri: require('../../assets/illustrations/ob_one.png'),
       text: 'Create your \n account',
     },
     {
       id: 1,
-      imageUri: require('../../assets/images/ob2.png'),
+      imageUri: require('../../assets/illustrations/ob_two.png'),
       text: 'Smartly save and \n grow your money',
     },
     {
       id: 2,
-      imageUri: require('../../assets/images/ob3.png'),
+      imageUri: require('../../assets/illustrations/ob_three.png'),
       text: 'Share your growth and \n rewards with friends',
     },
   ];
@@ -28,10 +28,14 @@ const OnBoarding = ({navigation}) => {
   const renderComp = ({item}) => {
     return (
       <View style={[silly.w100p, silly.jcaround, silly.aic]} center>
-        <Image style={[silly.my5]} source={item.imageUri} />
+        <Image
+          style={[silly.my5, silly.w90p, silly.h40p, silly.rmcon]}
+          source={item.imageUri}
+        />
         <SillyText
           family="SemiBold"
           center
+          color={clr1}
           style={[silly.px5, silly.my5, silly.tc]}
           size={36}>
           {item.text}
@@ -42,7 +46,7 @@ const OnBoarding = ({navigation}) => {
               <View
                 key={obItem.id}
                 style={[
-                  silly.bg2,
+                  silly.bg1,
                   silly.ph,
                   silly.mx1,
                   silly.br10,
@@ -71,7 +75,7 @@ const OnBoarding = ({navigation}) => {
   });
 
   return (
-    <View style={styles.main}>
+    <View style={[silly.f1]}>
       <FlatList
         ref={fRef}
         data={ob_data}
@@ -81,12 +85,14 @@ const OnBoarding = ({navigation}) => {
         pagingEnabled
         onViewableItemsChanged={onViewRef.current}
       />
-      <View style={[silly.my5, silly.fr, silly.jcbtw, silly.w100p]}>
+      <View style={[silly.my5, silly.fr, silly.jcbtw, silly.w100p, silly.aic]}>
         <SillyButton mx={20} onPress={() => navigation.navigate('Signup')}>
-          <SillyText size={18}>Skip</SillyText>
+          <SillyText color={clr1} size={18}>
+            Skip
+          </SillyText>
         </SillyButton>
-        <SillyButton onPress={handleFlatNext} mx={20} bg="white" px={40}>
-          <SillyText color={globals.site_color} size={20} style={[silly.fwb]}>
+        <SillyButton onPress={handleFlatNext} mx={20} bg={clr1} px={40}>
+          <SillyText color={clr2} size={20} style={[silly.fwb]}>
             Next
           </SillyText>
         </SillyButton>

@@ -1,4 +1,10 @@
-import {View, Image, FlatList, Dimensions} from 'react-native';
+import {
+  View,
+  Image,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {clr1, clr5, clr2} from '../../../config/globals';
@@ -8,49 +14,36 @@ import {
   SillyView,
   SillyButton,
 } from '../../../Silly/components/silly_comps';
-import art from '../../../assets/stories/stories-1.png';
+import art from '../../../assets/illustrations/quiz.png';
+import {useEffect} from 'react';
+import axios from 'axios';
+import {server} from '../../../config/server_url';
+import {useContext} from 'react';
 const {width} = Dimensions.get('window');
-const ques = [
-  {
-    id: 0,
-    ques: 'How long would you like to hold your Mutual Funds investments',
-    options: [
-      '1 to 3 years',
-      '4 to 6 years',
-      '7 to 10 years',
-      'More than 10 years',
-    ],
-    ans: 3,
-    tip: 'first tip',
-  },
-  {
-    id: 1,
-    ques: 'How long would you like to hold your Mutual Funds investments',
-    options: [
-      '1 to 3 years',
-      '4 to 6 years',
-      '7 to 10 years',
-      'More than 10 years',
-    ],
-    ans: 3,
-    tip: 'first tip',
-  },
-  {
-    id: 2,
-    ques: 'How long would you like to hold your Mutual Funds investments',
-    options: [
-      '1 to 3 years',
-      '4 to 6 years',
-      '7 to 10 years',
-      'More than 10 years',
-    ],
-    ans: 3,
-    tip: 'first tip',
-  },
-];
-const ModuleQuiz = ({navigation}) => {
+import AuthContext from '../../../navigations/AuthContext';
+
+const ModuleQuiz = ({navigation, route}) => {
+  const {state} = useContext(AuthContext);
+  const {user_id} = state;
+  const quiz = route.params.quiz;
   const flatlist = useRef(null);
   const [index, setIndex] = useState(0);
+  const [info, setInfo] = useState({name: '', score: ''});
+  const [ques, setQues] = useState([]);
+
+  useEffect(() => {
+    const quizreq = async () => {
+      try {
+        const quizres = await axios.get(`${server}/learning/quiz/${quiz}/`);
+        console.log(quizres.data);
+        setQues(quizres.data.questions);
+        setInfo({name: quizres.data.name, score: quizres.data.score});
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    };
+    quizreq();
+  }, [quiz]);
   const handleNext = () => {
     if (ques[index + 1]) {
       setIndex(index + 1);
@@ -63,17 +56,56 @@ const ModuleQuiz = ({navigation}) => {
       flatlist.current.scrollToIndex({index: index - 1});
     }
   };
-  const renderQues = ({item}) => {
+  const handleSubmitQuiz = async () => {
+    try {
+      const quiz_submit = await axios.post(`${server}/learning/quiz/submit/`, {
+        user: user_id,
+        quiz: quiz,
+      });
+      console.log(quiz_submit);
+      navigation.navigate('QuizEnd', {info});
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const RenderQues = ({item}) => {
+    const handleSubmitOption = async choice => {
+      setQues(prev => {
+        const i = prev.findIndex(val => val.id === item.id);
+        prev[i].selected = choice;
+        return [...prev];
+      });
+      const checkres = await axios.post(
+        `${server}/learning/question/${item.id}/submit/`,
+        {user: user_id, choice},
+      );
+      console.log(checkres.data);
+      setQues(prev => {
+        const i = prev.findIndex(val => val.id === item.id);
+        prev[i].success = checkres.data.valid_answer;
+        return [...prev];
+      });
+    };
     return (
       <View style={{width: width - 40}}>
-        <SillyText family="SemiBold" size={30}>
-          {item.ques}
+        <SillyText family="SemiBold" size={20}>
+          {item.title}
         </SillyText>
-        <View style={[silly.my5]}>
-          {item.options.map((option, i) => {
+        <SillyText>{item.description}</SillyText>
+        <View style={[silly.my2]}>
+          {item.choices.map((option, i) => {
             return (
-              <SillyButton my={15} py={15} key={i} bg={`${clr2}33`}>
-                <SillyText size={20}>{option}</SillyText>
+              <SillyButton
+                onPress={() => handleSubmitOption(option.id)}
+                my={10}
+                py={10}
+                key={i}
+                bg={
+                  item.success && item.selected === option.id
+                    ? 'green'
+                    : `${clr2}33`
+                }>
+                <SillyText size={18}>{option.title}</SillyText>
               </SillyButton>
             );
           })}
@@ -83,28 +115,24 @@ const ModuleQuiz = ({navigation}) => {
   };
   return (
     <View style={[silly.f1]}>
-      <View style={[silly.m1]}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={[silly.m1]}>
         <Icon name="chevron-back-outline" size={30} color={clr1} />
-      </View>
+      </TouchableOpacity>
       <View style={[silly.fr, silly.jcbtw, silly.aic]}>
         <View style={[silly.px1, silly.ais]}>
           <SillyText color={clr1} family="SemiBold" size={30}>
-            Mutual Funds 101
+            {info.name}
           </SillyText>
           <SillyView
             style={[silly.fr, silly.aic, silly.bw1, silly.bc5]}
             px={20}
-            my={10}
+            my={5}
             bg="transparent">
-            <Icon name="star" color="orange" size={20} />
+            <Icon name="star" color={clr5} size={20} />
             <SillyText color={clr5} mx={5}>
-              10/30 points earned
+              {info.score} points to be earned{' '}
             </SillyText>
           </SillyView>
-          {/* progress */}
-          <View style={[silly.w60p, silly.bg5, silly.bg3, silly.my1]}>
-            <View style={[silly.w20p, silly.h5, silly.bg1, silly.br5]} />
-          </View>
         </View>
         <Image source={art} style={[silly.w30p, silly.rmcon, silly.h15p]} />
       </View>
@@ -120,7 +148,7 @@ const ModuleQuiz = ({navigation}) => {
           horizontal
           data={ques}
           keyExtractor={item => item.id}
-          renderItem={renderQues}
+          renderItem={RenderQues}
         />
         <View style={[silly.fr, silly.jcbtw]}>
           <SillyButton
@@ -132,7 +160,7 @@ const ModuleQuiz = ({navigation}) => {
           </SillyButton>
           {index === ques.length - 1 ? (
             <SillyButton
-              onPress={() => navigation.navigate('QuizEnd')}
+              onPress={handleSubmitQuiz}
               style={[silly.w40p]}
               bg={clr2}>
               <SillyText center color={clr1} size={20}>

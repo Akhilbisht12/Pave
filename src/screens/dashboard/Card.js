@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, TouchableOpacity, Dimensions, Image} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {View, TouchableOpacity, Dimensions, ToastAndroid} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Svg, {Path, Text as SvgText} from 'react-native-svg';
 import silly from '../../Silly/styles/silly';
@@ -9,11 +9,45 @@ import {
   SillyAvatar,
   SillyButton,
 } from '../../Silly/components/silly_comps';
-import {clr1, clr2, clr4, clr5, sec_color} from '../../config/globals';
+import {clr1, clr5} from '../../config/globals';
+import axios from 'axios';
 const {height} = Dimensions.get('window');
-
+import {server} from '../../config/server_url';
+import AuthContext from '../../navigations/AuthContext';
 const Card = () => {
   const [nots, setNots] = useState(false);
+  const [name, setName] = useState('');
+  const [earnings, setEarnings] = useState({badges: [], points: 0});
+  const {state} = useContext(AuthContext);
+  const {user_id} = state;
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      try {
+        const profilename = await axios.get(`${server}/profile/${user_id}/`);
+        setName(profilename.data.user_details.name);
+      } catch (error) {
+        console.log(error.response);
+        ToastAndroid.show(error.response.data.detail, ToastAndroid.SHORT);
+      }
+    };
+    getUserProfile();
+  }, [user_id]);
+  useEffect(() => {
+    const pointsreq = async () => {
+      try {
+        const pointsres = await axios.get(
+          `${server}/earning/overview/${user_id}/`,
+        );
+        setEarnings(pointsres.data);
+        console.log(pointsres.data);
+      } catch (error) {
+        console.log(error.response);
+      }
+    };
+    pointsreq();
+  }, [user_id]);
+
   return (
     <View>
       <View style={[silly.fr, silly.jcbtw, silly.aic, silly.ph]}>
@@ -24,15 +58,15 @@ const Card = () => {
             hgt={55}
             wdt={55}
             source={{
-              uri: 'https://cdn.pixabay.com/photo/2016/11/21/14/53/man-1845814_960_720.jpg',
+              uri: 'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/user.png',
             }}
           />
           <View>
             <SillyText mx={10} color={clr1} size={22} family="SemiBold">
-              Dylan Roberts
+              {name}
             </SillyText>
             <SillyText mx={10} color={clr5}>
-              5 Added Goals
+              {earnings.badges.length} badges earned
             </SillyText>
           </View>
         </View>
@@ -40,12 +74,12 @@ const Card = () => {
           <View style={[silly.jcc, silly.aic, silly.pxh]}>
             <Ionicons name="star" color={clr1} size={18} />
             <SillyText color={clr1} size={20}>
-              0
+              {earnings.points ? earnings.points : 0}
             </SillyText>
           </View>
         </SillyView>
       </View>
-      <SillyView round={5} py={10} px={10} bg={`${clr1}25`}>
+      {/* <SillyView round={5} py={10} px={10} bg={`${clr1}25`}>
         <TouchableOpacity
           onPress={() => setNots(!nots)}
           style={[silly.fr, silly.jcbtw, silly.aic]}>
@@ -72,7 +106,7 @@ const Card = () => {
             );
           })}
         </View>
-      </SillyView>
+      </SillyView> */}
     </View>
   );
 };

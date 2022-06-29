@@ -10,12 +10,13 @@ import {
 import React, {useState, useRef} from 'react';
 import silly from '../../../Silly/styles/silly';
 import {SillyText} from '../../../Silly/components/silly_comps';
-import profileImg from '../../../assets/images/ob1.png';
+import profileImg from '../../../assets/illustrations/ob_one.png';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AnimControl from '../../../utils/AnimControl';
 import ProfileDetails from './ProfileDetails';
 import OTPVerify from './OtpVerify';
 import CreatePassword from './CreatePassword';
+import {clr1} from '../../../config/globals';
 const {height} = Dimensions.get('window');
 const Signup = () => {
   const formheight = useRef(new Animated.Value(80)).current;
@@ -47,30 +48,34 @@ const Signup = () => {
     height: {height: formheight, position: 'absolute', bottom: bottom},
   });
   return (
-    <View style={[silly.f1, silly.bg1]}>
+    <View style={[silly.f1, silly.bg2]}>
       {/* progess state */}
       <View style={[silly.fr, silly.jcaround, silly.my2]}>
         <View style={[silly.aic]}>
-          <SillyText size={18}>Profile</SillyText>
-          <View style={[silly.w40p, silly.bggray, silly.br5, silly.my1]}>
+          <SillyText color={clr1} size={18}>
+            Profile
+          </SillyText>
+          <View style={[silly.w40p, silly.bg5, silly.br5, silly.my1]}>
             <View
               style={[
                 otpScreen >= 2 ? silly.w40p : silly.w20p,
                 silly.h5,
-                silly.bg2,
+                silly.bg1,
                 silly.br5,
               ]}
             />
           </View>
         </View>
         <View style={[silly.aic]}>
-          <SillyText size={18}>Verification</SillyText>
-          <View style={[silly.w40p, silly.bggray, silly.br5, silly.my1]}>
+          <SillyText color={clr1} size={18}>
+            Verification
+          </SillyText>
+          <View style={[silly.w40p, silly.bg5, silly.br5, silly.my1]}>
             <View
               style={[
                 otpScreen >= 2 ? silly.w20p : silly.w0,
                 silly.h5,
-                silly.bg2,
+                silly.bg1,
                 silly.br5,
               ]}
             />
@@ -79,22 +84,32 @@ const Signup = () => {
       </View>
       {/* image view */}
       <View style={[silly.aic, silly.jcs, silly.f2, silly.my5]}>
-        <Image style={silly.my3} source={profileImg} />
-        <SillyText
-          family="SemiBold"
-          style={[silly.my2]}
-          size={32}
-          color="white">
+        <Image
+          style={[silly.my3, silly.w80p, silly.h40p]}
+          source={profileImg}
+        />
+        <SillyText family="SemiBold" style={[silly.my2]} size={32} color={clr1}>
           Create Profile
         </SillyText>
-        <SillyText size={16} my={15} style={[silly.w60p, silly.tc]}>
+        <SillyText
+          size={16}
+          color={clr1}
+          my={15}
+          style={[silly.w60p, silly.tc]}>
           The profile enables you to save money, earn rewards and share
           activities with your friends in the pave community.
         </SillyText>
       </View>
       {/* Animated Area */}
       <Animated.View
-        style={[silly.bg2, silly.br20, silly.w100p, silly.p2, styles.height]}>
+        style={[
+          silly.bg2,
+          silly.br20,
+          silly.w100p,
+          silly.p2,
+          styles.height,
+          {elevation: 2, borderColor: clr1, borderWidth: 1},
+        ]}>
         <TouchableOpacity
           onPress={viewForm}
           style={[silly.jcc, silly.aic, otpScreen === 0 ? silly.df : silly.dn]}>

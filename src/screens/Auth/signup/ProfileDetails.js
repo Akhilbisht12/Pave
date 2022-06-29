@@ -38,8 +38,8 @@ const ProfileDetails = ({setOtpScreen, otpScreen, setAuthData}) => {
       });
       setOtpScreen(otpScreen + 1);
     } catch (error) {
-      console.log(error.response);
-      ToastAndroid.show(error.response.data.detail, ToastAndroid.SHORT);
+      console.log(error.response.data);
+      ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
     }
   };
   return (

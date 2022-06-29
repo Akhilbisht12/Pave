@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
   FlatList,
   Dimensions,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {clr1, clr2, clr4} from '../../config/globals';
@@ -18,10 +19,25 @@ import silly from '../../Silly/styles/silly';
 import image from '../../assets/images/ob1.png';
 import img1 from '../../assets/images/learn.png';
 import img2 from '../../assets/images/learn_2.png';
+import axios from 'axios';
+import {server} from '../../config/server_url';
 
 const {width, height} = Dimensions.get('window');
 const Activity = () => {
   const navigation = useNavigation();
+  const [modules, setModules] = useState([]);
+  useEffect(() => {
+    const getModules = async () => {
+      try {
+        const modulesres = await axios.get(`${server}/learning/modules/`);
+        setModules(modulesres.data.results);
+        console.log(modulesres.data);
+      } catch (error) {
+        console.log(error.response);
+      }
+    };
+    getModules();
+  }, []);
   const data = [
     {
       name: 'Financial planning For the first timers',
@@ -63,25 +79,31 @@ const Activity = () => {
         py={15}
         round={20}
         bg={clr2}
-        style={[silly.h40p, silly.w60p, silly.jcbtw, silly.f1, silly.mr1]}>
+        style={[silly.h35p, silly.w60p, silly.jcbtw, silly.f1, silly.mr1]}>
         <View style={[silly.aic]}>
           <Image
-            source={item.img}
+            source={img1}
             style={[silly.h15p, silly.w50p, {resizeMode: 'contain'}]}
           />
         </View>
-        <View style={[silly.ais]}>
+        {/* <View style={[silly.ais]}>
           <SillyView
             style={[silly.bw1, {borderColor: item.color}]}
             bg="transparent">
             <SillyText color={item.color}>{item.status}</SillyText>
           </SillyView>
-        </View>
+        </View> */}
 
-        <SillyText color={clr4} size={25}>
+        <SillyText family="SemiBold" color={clr4} size={20}>
           {item.name}
         </SillyText>
-        <View style={[silly.fr, silly.w50p]}>
+        <ScrollView nestedScrollEnabled contentContainerStyle={[silly.hmax10p]}>
+          <SillyText color={clr4} size={16}>
+            {item.description}
+          </SillyText>
+        </ScrollView>
+
+        {/* <View style={[silly.fr, silly.w50p]}>
           <View center style={[silly.fr, silly.jcs, silly.mr1]}>
             <Ionicons color={clr4} name="time-outline" size={18} />
             <SillyText size={18} color={clr4}>
@@ -96,8 +118,11 @@ const Activity = () => {
               {item.point} Points
             </SillyText>
           </View>
-        </View>
-        <SillyButton style={[silly.bw1, silly.bc1]} round={25}>
+        </View> */}
+        <SillyButton
+          onPress={() => navigation.navigate('Learn', {id: item.id})}
+          style={[silly.bw1, silly.bc1]}
+          round={25}>
           <SillyText size={17} center color={clr1}>
             Continue
           </SillyText>
@@ -123,7 +148,7 @@ const Activity = () => {
 
       <FlatList
         style={silly.my2}
-        data={data}
+        data={modules}
         renderItem={item => renderGoalCard(item)}
         keyExtractor={item => item.name}
         horizontal

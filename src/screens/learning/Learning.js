@@ -1,5 +1,5 @@
 import {FlatList, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import silly from '../../Silly/styles/silly';
 import {
   SillyText,
@@ -10,6 +10,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import GroupUsers from '../../components/GroupUsers';
 import {clr1, clr2, clr5, sec_color} from '../../config/globals';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import {server} from '../../config/server_url';
 const data = [
   {
     id: '0',
@@ -48,6 +50,18 @@ const Learning = () => {
   const navigation = useNavigation();
   const [filter, setFilter] = useState(0);
   const [filtereddata, setfilteredData] = useState(data);
+  const [modules, setModules] = useState([]);
+  useEffect(() => {
+    const getModules = async () => {
+      try {
+        const modulesres = await axios.get(`${server}/learning/modules/`);
+        setModules(modulesres.data.results);
+      } catch (error) {
+        console.log(error.response);
+      }
+    };
+    getModules();
+  }, []);
   const handleFilterData = i => {
     setFilter(i);
     switch (i) {
@@ -64,9 +78,6 @@ const Learning = () => {
   };
 
   const renderComp = ({item}) => {
-    const randomColor = Math.floor(Math.random() * 16777215)
-      .toString(16)
-      .padStart(6, '0');
     const getButtonColor = () => {
       switch (item.status) {
         case 'Complete':
@@ -78,21 +89,22 @@ const Learning = () => {
       }
     };
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('Learn')}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Learn', {id: item.id})}>
         <View style={[silly.m1]}>
           <View
             style={[
               silly.py2,
               silly.px1,
               silly.brt10,
-              {backgroundColor: `#${randomColor}`},
+              {backgroundColor: clr1},
             ]}>
-            <SillyText family="SemiBold">{item.title}</SillyText>
+            <SillyText family="SemiBold">{item.name}</SillyText>
           </View>
           <View style={[silly.bg2, silly.pt2, silly.px1, silly.brb10]}>
             <View>
               <SillyText size={12} color="gray">
-                {item.desc}
+                {item.description}
               </SillyText>
             </View>
             <View
@@ -105,26 +117,18 @@ const Learning = () => {
                 silly.bt1,
                 silly.bc3,
               ]}>
-              <GroupUsers />
-              <View style={[silly.fr, silly.aic]}>
-                <View style={[silly.fr, silly.aic, silly.mx1]}>
-                  <Ionicons color={clr1} size={18} name="timer-outline" />
-                  <SillyText mx={5} color={clr1}>
-                    {item.time}
-                  </SillyText>
-                </View>
-                <View style={[silly.fr, silly.aic, silly.mx1]}>
-                  <Ionicons color={clr1} size={18} name="star-outline" />
-                  <SillyText mx={5} color={clr1}>
-                    {item.points} points
-                  </SillyText>
-                </View>
-              </View>
-              <SillyButton bg={`#${getButtonColor()}33`}>
-                <SillyText family="SemiBold" color={`#${getButtonColor()}`}>
-                  {item.status}
+              <View style={[silly.fr, silly.aic, silly.mx1]}>
+                <Ionicons color={clr1} size={18} name="timer-outline" />
+                <SillyText mx={5} color={clr1}>
+                  5 Min
                 </SillyText>
-              </SillyButton>
+              </View>
+              <View style={[silly.fr, silly.aic, silly.mx1]}>
+                <Ionicons color={clr1} size={18} name="star-outline" />
+                <SillyText mx={5} color={clr1}>
+                  10 points
+                </SillyText>
+              </View>
             </View>
           </View>
         </View>
@@ -133,45 +137,13 @@ const Learning = () => {
   };
   return (
     <View style={[silly.f1]}>
-      <View style={[silly.h30p, silly.bg1, silly.jceven]}>
+      <View style={[silly.h25p, silly.bg1, silly.jceven]}>
         <View style={[silly.px2]}>
-          <SillyText
-            style={[silly.px2]}
-            color="white"
-            size={35}
-            family="Medium">
+          <SillyText style={[silly.px2]} color={clr2} size={30} family="Medium">
             Learning
           </SillyText>
         </View>
 
-        {/* <View style={[silly.fr, silly.px2, silly.jcbtw]}>
-          {[
-            {name: '12 Modules Completed', color: '#ffc145'},
-            {color: '#ff6b6c', name: '24 Ongoing'},
-            {color: '5b5f97', name: '500 points earned'},
-          ].map((item, i) => {
-            return (
-              <View
-                key={i}
-                style={[
-                  silly.px1,
-                  silly.py2,
-                  silly.w30p,
-                  silly.br5,
-                  {backgroundColor: `${item.color}80`},
-                ]}>
-                <Ionicons
-                  name="checkmark-circle"
-                  color={item.color}
-                  size={16}
-                />
-                <SillyText my={5} size={16}>
-                  {item.name}
-                </SillyText>
-              </View>
-            );
-          })}
-        </View> */}
         <SillyView
           bg={sec_color}
           py={15}
@@ -190,7 +162,7 @@ const Learning = () => {
                   my={5}
                   center
                   style={[silly.w20p]}
-                  size={18}
+                  size={14}
                   family="SemiBold">
                   {item.name}
                 </SillyText>
@@ -198,7 +170,7 @@ const Learning = () => {
             );
           })}
         </SillyView>
-        <SillyView
+        {/* <SillyView
           mx={5}
           px={2}
           py={2}
@@ -235,12 +207,12 @@ const Learning = () => {
               </SillyButton>
             );
           })}
-        </SillyView>
+        </SillyView> */}
       </View>
       <View style={[silly.f1]}>
         <FlatList
           scroll
-          data={filtereddata.reverse()}
+          data={modules}
           keyExtractor={item => item.id}
           renderItem={item => renderComp(item)}
         />
