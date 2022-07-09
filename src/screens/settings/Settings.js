@@ -1,4 +1,4 @@
-import {View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity, ScrollView} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {
   SillyText,
@@ -28,7 +28,7 @@ const Settings = ({navigation}) => {
         </SillyText>
       </View>
 
-      <View style={[silly.my2]}>
+      <ScrollView style={[silly.my2, silly.fg1]}>
         <SillyButton
           py={15}
           style={[silly.fr, silly.aic]}
@@ -109,7 +109,7 @@ const Settings = ({navigation}) => {
             Logout
           </SillyText>
         </SillyButton>
-      </View>
+      </ScrollView>
       {/* notification panel */}
       <Notifications setEditNot={setEditNot} editNot={editNot} />
       <Privacy setEditPri={setEditPri} editPri={editPri} />

@@ -16,19 +16,24 @@ import {clr1} from '../../config/globals';
 import Sound from 'react-native-sound';
 import {server} from '../../config/server_url';
 import axios from 'axios';
+import SillyModal from '../../Silly/components/SillyModal';
 const {width} = Dimensions.get('window');
 const wheelSize = width * 1.8;
 Sound.setCategory('Playback');
-const FortuneWheel = ({spinType, fortunes}) => {
+
+const FortuneWheel = ({spinType, fortunes, handleOpenModel}) => {
+  const [winner, setWinner] = useState();
   // sound logic
   const whoosh = new Sound('spin.wav', Sound.MAIN_BUNDLE);
   const winnerSound = new Sound('winner.wav', Sound.MAIN_BUNDLE);
+  const fail = new Sound('fail.wav', Sound.MAIN_BUNDLE);
   const angleBySegment = 360 / fortunes.length;
   const angleOffSet = angleBySegment / 2;
   const rotate = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    console.log('rotate' + rotate._value);
-  }, [rotate]);
+  // useEffect(() => {
+  //   console.log('rotate' + rotate._value);
+  // }, [rotate]);
+
   const makeWheel = () => {
     const data = Array.from({length: fortunes.length}).fill(1);
     const arcs = d3Shape.pie()(data);
@@ -47,15 +52,16 @@ const FortuneWheel = ({spinType, fortunes}) => {
       };
     });
   };
-
   const getWinner = async () => {
     try {
       const winnerres = await axios.post(`${server}/earning/spin-wheel/`);
       const winner_index = fortunes.findIndex(
         item => item.name === winnerres.data.name,
       );
+      setWinner(winnerres.data);
+
       console.log(winnerres.data.name, fortunes[winner_index]);
-      return winner_index;
+      return {index: winner_index, name: winnerres.data.name};
     } catch (error) {
       console.log(error.response);
       ToastAndroid.show('Failed to spin. Please try again', ToastAndroid.SHORT);
@@ -65,7 +71,7 @@ const FortuneWheel = ({spinType, fortunes}) => {
   const spinWheel = async () => {
     rotate.setValue(0);
     await getWinner().then(res => {
-      console.log(res + 'winner');
+      console.log(typeof res + 'winner');
       whoosh.play(success => {
         if (success) {
           console.log('successfully played');
@@ -74,12 +80,17 @@ const FortuneWheel = ({spinType, fortunes}) => {
         }
       });
       Animated.timing(rotate, {
-        toValue: 9 - res,
+        toValue: 9 - res.index,
         duration: 4000,
         useNativeDriver: false,
       }).start(() => {
         whoosh.stop();
-        winnerSound.play();
+        if (res.index === 0) {
+          fail.play();
+        } else {
+          winnerSound.play();
+        }
+        handleOpenModel(res.index === 0 ? 0 : res.name);
         // const snapTo = snap(angleBySegment);
         // Animated.timing(rotate, {
         //   toValue: snapTo(rotate._value),

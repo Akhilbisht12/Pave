@@ -1,1 +1,1 @@
-exports.server = 'http://3.6.181.80:8000/api/v1';
+exports.server = 'https://dev-api.pave.money/api/v1';

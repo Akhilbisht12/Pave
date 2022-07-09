@@ -93,7 +93,9 @@ const Cards = ({ques, quesIndex, setQuesIndex}) => {
             <SillyText color={clr1} size={25} family="SemiBold">
               {item.title}
             </SillyText>
-            <ScrollView nestedScrollEnabled style={[silly.h30p]}>
+            <ScrollView
+              nestedScrollEnabled
+              contentContainerStyle={[silly.h25p]}>
               <SillyText color={clr4} my={10} size={14}>
                 {item.content}
               </SillyText>

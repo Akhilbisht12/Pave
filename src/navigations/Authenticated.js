@@ -53,9 +53,12 @@ const Authenticated = () => {
             console.info(access_token.data);
             await Storage.setItem('access', access_token.data.access);
             // CodePush.restartApp();
-            axios.defaults.headers.common.Authorization = `Bearer ${access_token.data.access}`;
-            axiosApi.defaults.headers.common.Authorization = `Bearer ${access_token.data.access}`;
-            return axiosApi(originalRequest);
+            dispatch({type: 'update_token', token: access_token.data.access});
+            // axios.defaults.headers.common.Authorization = `Bearer ${access_token.data.access}`;
+            // axiosApi.defaults.headers.common.Authorization = `Bearer ${access_token.data.access}`;
+            originalRequest.headers.Authorization = `Bearer ${access_token.data.access}`;
+            return originalRequest;
+            // return axiosApi(originalRequest);
           } catch (ref_error) {
             console.log(ref_error.response);
             dispatch({type: 'logout'});

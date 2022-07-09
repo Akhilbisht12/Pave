@@ -145,9 +145,7 @@ const SimpleSaving = ({navigation, route}) => {
           <SillyText color="#28a745" size={20} family="SemiBold" my={5}>
             {route.params.overview
               ? `₹ ${totalIn.net_amount}`
-              : `+
-            ${(amount - principal) * 0.01}
-            %`}
+              : `+${(amount - principal) * 0.01}%`}
           </SillyText>
           <SillyText>
             {route.params.overview

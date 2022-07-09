@@ -12,12 +12,15 @@ import {server} from '../../config/server_url';
 import {useState} from 'react';
 import AuthContext from '../../navigations/AuthContext';
 import {useContext} from 'react';
+import SillyModal from '../../Silly/components/SillyModal';
 
 const DailySpin = () => {
   const {state} = useContext(AuthContext);
   const {user_id} = state;
   const [fortunes, setFortunes] = useState([]);
   const [points, setPoints] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [win, setWin] = useState();
   useEffect(() => {
     const getFortunes = async () => {
       try {
@@ -38,7 +41,15 @@ const DailySpin = () => {
       }
     };
     getFortunes();
-  }, []);
+  }, [user_id]);
+
+  const handleOpenModel = winnner => {
+    setOpen(true);
+    setWin(winnner);
+  };
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
   return (
     <View style={[silly.f1, silly.jcaround]}>
       <SillyView
@@ -88,9 +99,14 @@ const DailySpin = () => {
       <View style={[silly.h50p, silly.aic, silly.jcc]}>
         {/* <SpinWheel /> */}
         {fortunes.length === 0 ? null : (
-          <FortuneWheel fortunes={fortunes} spinType={true} />
+          <FortuneWheel
+            handleOpenModel={handleOpenModel}
+            fortunes={fortunes}
+            spinType={true}
+          />
         )}
       </View>
+      <SillyModal win={win} open={open} setOpen={handleCloseModal} />
     </View>
   );
 };

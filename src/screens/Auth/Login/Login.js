@@ -14,6 +14,7 @@ import {server} from '../../../config/server_url';
 import Storage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import AuthContext from '../../../navigations/AuthContext';
+import messaging from '@react-native-firebase/messaging';
 
 const Login = () => {
   const {dispatch} = useContext(AuthContext);
@@ -105,6 +106,17 @@ const Login = () => {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   };
+  const sendFirebaseToken = async token => {
+    try {
+      const sendtoken = await axios.post(`${server}/iam/firebase/devices/`, {
+        registration_id: token,
+        type: 'android',
+      });
+      console.log(sendtoken.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleLogin = async () => {
     try {
       if (!login.mobile || login.mobile.length !== 10) {
@@ -123,6 +135,12 @@ const Login = () => {
         password: login.password,
       });
       console.log(loginreq.data);
+      messaging()
+        .getToken()
+        .then(token => {
+          console.log('token refreshed on login');
+          sendFirebaseToken(token);
+        });
       await Storage.setItem('refresh', loginreq.data.refresh);
       await Storage.setItem('access', loginreq.data.access);
       await Storage.setItem('user_id', loginreq.data.user_id);

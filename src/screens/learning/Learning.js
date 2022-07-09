@@ -12,70 +12,51 @@ import {clr1, clr2, clr5, sec_color} from '../../config/globals';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import {server} from '../../config/server_url';
-const data = [
-  {
-    id: '0',
-    title: 'Mutual Funds 101',
-    desc: "Created by our in house financial experts, this is a quick begginer's guide to mutual funds to help you get started on the right financial track.",
-    points: '10',
-    time: '5 Min',
-    status: 'Complete',
-  },
-  {
-    id: '1',
-    title: 'Goal based vs Simple Savers',
-    desc: "Created by our in house financial experts, this is a quick begginer's guide to mutual funds to help you get started on the right financial track.",
-    points: '10',
-    time: '5 Min',
-    status: 'Complete',
-  },
-  {
-    id: '2',
-    title: 'Financial Planning for the first timers',
-    desc: "Created by our in house financial experts, this is a quick begginer's guide to mutual funds to help you get started on the right financial track.",
-    points: '10',
-    time: '5 Min',
-    status: 'Ongoing',
-  },
-  {
-    id: '3',
-    title: 'Your first saving fund',
-    desc: "Created by our in house financial experts, this is a quick begginer's guide to mutual funds to help you get started on the right financial track.",
-    points: '10',
-    time: '5 Min',
-    status: 'Quiz Pending',
-  },
-];
+import {useReducer} from 'react';
+import {useContext} from 'react';
+import AuthContext from '../../navigations/AuthContext';
+
 const Learning = () => {
+  const {state} = useContext(AuthContext);
+  const {user_id} = state;
   const navigation = useNavigation();
   const [filter, setFilter] = useState(0);
-  const [filtereddata, setfilteredData] = useState(data);
+  const [overview, setOverview] = useState({
+    score: '',
+    module_completed: '',
+    module_active: '',
+  });
+  const [filtereddata, setfilteredData] = useState([]);
   const [modules, setModules] = useState([]);
   useEffect(() => {
     const getModules = async () => {
       try {
         const modulesres = await axios.get(`${server}/learning/modules/`);
         setModules(modulesres.data.results);
+        const overview = await axios.get(
+          `${server}/learning/overview/${user_id}/`,
+        );
+        setOverview(overview.data);
       } catch (error) {
         console.log(error.response);
       }
     };
     getModules();
-  }, []);
-  const handleFilterData = i => {
-    setFilter(i);
-    switch (i) {
-      case 2:
-        setfilteredData(data.filter(item => item.status.includes('Ongoing')));
-        break;
-      case 0:
-        setfilteredData(data);
-        break;
-      case 1:
-        setfilteredData(data.filter(item => item.status.includes('Complete')));
-        break;
-    }
-  };
+  }, [user_id]);
+  // const handleFilterData = i => {
+  //   setFilter(i);
+  //   switch (i) {
+  //     case 2:
+  //       setfilteredData(data.filter(item => item.status.includes('Ongoing')));
+  //       break;
+  //     case 0:
+  //       setfilteredData(data);
+  //       break;
+  //     case 1:
+  //       setfilteredData(data.filter(item => item.status.includes('Complete')));
+  //       break;
+  //   }
+  // };
 
   const renderComp = ({item}) => {
     const getButtonColor = () => {
@@ -151,13 +132,19 @@ const Learning = () => {
           mx={15}
           style={[silly.fr, silly.jcbtw, silly.aic]}>
           {[
-            {name: '12 Modules Completed', color: '#ffc145'},
-            {color: '#ff6b6c', name: '24 Ongoing'},
-            {color: '5b5f97', name: '500 points earned'},
+            {
+              name: `${overview.module_active} active modules`,
+              color: '#ffc145',
+            },
+            {
+              color: '#ff6b6c',
+              name: `${overview.module_completed} modules completed`,
+            },
+            {color: '5b5f97', name: `${overview.score} points earned`},
           ].map((item, i) => {
             return (
               <View key={i} style={[silly.aic]}>
-                <Ionicons name="checkmark-circle" size={25} />
+                <Ionicons color={clr2} name="checkmark-circle" size={25} />
                 <SillyText
                   my={5}
                   center

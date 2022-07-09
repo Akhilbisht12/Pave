@@ -4,6 +4,8 @@ import {
   FlatList,
   Dimensions,
   TouchableOpacity,
+  ToastAndroid,
+  ScrollView,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -45,6 +47,10 @@ const ModuleQuiz = ({navigation, route}) => {
     quizreq();
   }, [quiz]);
   const handleNext = () => {
+    if (!ques[index].selected) {
+      ToastAndroid.show('Answer First', ToastAndroid.SHORT);
+      return;
+    }
     if (ques[index + 1]) {
       setIndex(index + 1);
       flatlist.current.scrollToIndex({index: index + 1});
@@ -73,6 +79,7 @@ const ModuleQuiz = ({navigation, route}) => {
       setQues(prev => {
         const i = prev.findIndex(val => val.id === item.id);
         prev[i].selected = choice;
+        prev[i].answered = true;
         return [...prev];
       });
       const checkres = await axios.post(
@@ -83,6 +90,7 @@ const ModuleQuiz = ({navigation, route}) => {
       setQues(prev => {
         const i = prev.findIndex(val => val.id === item.id);
         prev[i].success = checkres.data.valid_answer;
+        prev[i].correct_choice = checkres.data.correct_choice;
         return [...prev];
       });
     };
@@ -101,8 +109,10 @@ const ModuleQuiz = ({navigation, route}) => {
                 py={10}
                 key={i}
                 bg={
-                  item.success && item.selected === option.id
+                  item.selected && item.correct_choice === option.id
                     ? 'green'
+                    : !item.success && item.selected === option.id
+                    ? 'red'
                     : `${clr2}33`
                 }>
                 <SillyText size={18}>{option.title}</SillyText>
@@ -113,6 +123,9 @@ const ModuleQuiz = ({navigation, route}) => {
       </View>
     );
   };
+  const onViewRef = useRef(flat => {
+    setIndex(flat.viewableItems[0].index);
+  });
   return (
     <View style={[silly.f1]}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={[silly.m1]}>
@@ -136,46 +149,49 @@ const ModuleQuiz = ({navigation, route}) => {
         </View>
         <Image source={art} style={[silly.w30p, silly.rmcon, silly.h15p]} />
       </View>
-      <SillyView
-        my={0.01}
-        bg={clr1}
-        py={50}
-        px={20}
-        style={[silly.fg1, silly.mt2]}>
-        <FlatList
-          ref={flatlist}
-          pagingEnabled
-          horizontal
-          data={ques}
-          keyExtractor={item => item.id}
-          renderItem={RenderQues}
-        />
-        <View style={[silly.fr, silly.jcbtw]}>
-          <SillyButton
-            onPress={handlePrev}
-            style={[silly.bw1, silly.bc2, silly.w40p]}>
-            <SillyText center size={20}>
-              Back
-            </SillyText>
-          </SillyButton>
-          {index === ques.length - 1 ? (
+      <ScrollView contentContainerStyle={[silly.fg1]}>
+        <SillyView
+          my={0.01}
+          bg={clr1}
+          py={50}
+          px={20}
+          style={[silly.fg1, silly.mt2]}>
+          <FlatList
+            ref={flatlist}
+            pagingEnabled
+            horizontal
+            data={ques}
+            keyExtractor={item => item.id}
+            renderItem={RenderQues}
+            onViewableItemsChanged={onViewRef.current}
+          />
+          <View style={[silly.fr, silly.jcbtw]}>
             <SillyButton
-              onPress={handleSubmitQuiz}
-              style={[silly.w40p]}
-              bg={clr2}>
-              <SillyText center color={clr1} size={20}>
-                Complete
+              onPress={handlePrev}
+              style={[silly.bw1, silly.bc2, silly.w40p]}>
+              <SillyText center size={20}>
+                Back
               </SillyText>
             </SillyButton>
-          ) : (
-            <SillyButton onPress={handleNext} style={[silly.w40p]} bg={clr2}>
-              <SillyText center color={clr1} size={20}>
-                Next
-              </SillyText>
-            </SillyButton>
-          )}
-        </View>
-      </SillyView>
+            {index === ques.length - 1 ? (
+              <SillyButton
+                onPress={handleSubmitQuiz}
+                style={[silly.w40p]}
+                bg={clr2}>
+                <SillyText center color={clr1} size={20}>
+                  Complete
+                </SillyText>
+              </SillyButton>
+            ) : (
+              <SillyButton onPress={handleNext} style={[silly.w40p]} bg={clr2}>
+                <SillyText center color={clr1} size={20}>
+                  Next
+                </SillyText>
+              </SillyButton>
+            )}
+          </View>
+        </SillyView>
+      </ScrollView>
     </View>
   );
 };

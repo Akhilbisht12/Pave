@@ -56,7 +56,7 @@ const SimpleOverview = ({navigation}) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={[silly.m1]}>
-          <Icon name="chevron-back-outline" size={35} />
+          <Icon color={clr2} name="chevron-back-outline" size={35} />
         </TouchableOpacity>
         <View style={[silly.p1]}>
           <View>
@@ -187,7 +187,7 @@ const SimpleOverview = ({navigation}) => {
             <SillyText my={15} size={18}>
               Withdraw your money
             </SillyText>
-            <Icon name="chevron-forward" size={25} />
+            <Icon color={clr2} name="chevron-forward" size={25} />
           </SillyButton>
         </View>
         <SillyView

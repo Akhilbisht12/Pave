@@ -2,7 +2,7 @@ import {View, TouchableOpacity, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import silly from '../../../Silly/styles/silly';
 import {SillyView, SillyText} from '../../../Silly/components/silly_comps';
-import {clr1, clr3, clr4, clr5} from '../../../config/globals';
+import {clr1, clr2, clr3, clr4, clr5} from '../../../config/globals';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useEffect} from 'react';
 import axios from 'axios';
@@ -46,7 +46,7 @@ const Transactions = ({setTrans, trans}) => {
           Transactions
         </SillyText>
         <TouchableOpacity onPress={() => setTrans(false)}>
-          <Icon name="close-outline" size={35} />
+          <Icon color={clr2} name="close-outline" size={35} />
         </TouchableOpacity>
       </SillyView>
       <ScrollView style={[silly.p1, silly.my1, silly.h60p]}>

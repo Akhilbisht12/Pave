@@ -51,7 +51,7 @@ const Games = () => {
           </SillyText>
         </View>
         <SillyButton px={10} style={[silly.fr, silly.jcc, silly.aic]} bg={clr1}>
-          <Icon name="timer-outline" size={22} />
+          <Icon name="timer-outline" color={clr2} size={22} />
           <SillyText mx={5} family="SemiBold" size={18}>
             Almost Here!
           </SillyText>

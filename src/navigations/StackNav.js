@@ -3,7 +3,6 @@ import Storage from '@react-native-async-storage/async-storage';
 import AuthContext from './AuthContext';
 import Unauthenticated from './Unauthenticated';
 import Authenticated from './Authenticated';
-import silly from '../Silly/styles/silly';
 
 const StackNav = () => {
   // const [user, setUser] = useState(false);
@@ -25,6 +24,10 @@ const StackNav = () => {
       case 'logout': {
         Storage.clear();
         return initialState;
+      }
+      case 'update_token': {
+        const {token} = action;
+        return {...state, access: token};
       }
       default:
         return state;

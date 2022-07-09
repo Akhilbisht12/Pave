@@ -28,6 +28,27 @@ const App = () => {
         console.log('firebase ' + token);
         sendFirebaseToken(token);
       });
+
+    //method one from firebase
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state: method 1',
+        remoteMessage.notification,
+      );
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state: method2 ',
+            remoteMessage.notification,
+          );
+        }
+      });
+    //update server token whenever firebase token is updated
     return messaging().onTokenRefresh(token => {
       sendFirebaseToken(token);
     });

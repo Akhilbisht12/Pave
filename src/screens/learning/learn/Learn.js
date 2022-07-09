@@ -1,4 +1,4 @@
-import {ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {Dimensions, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import silly from '../../../Silly/styles/silly';
 import SillyText from '../../../Silly/components/SillyText';
@@ -9,18 +9,30 @@ import {clr1, clr2} from '../../../config/globals';
 import {useEffect} from 'react';
 import axios from 'axios';
 import {server} from '../../../config/server_url';
+import {useContext} from 'react';
+import AuthContext from '../../../navigations/AuthContext';
+import {updateLocale} from 'moment';
 
 const Learn = ({navigation, route}) => {
   const [chaps, setChaps] = useState([]);
   const [module_info, setModule_info] = useState({name: '', description: ''});
   const [quesIndex, setQuesIndex] = useState(chaps.length + 1);
   const module_id = route.params.id;
+  const {width} = Dimensions.get('window');
+  const {state} = useContext(AuthContext);
+  const {user_id} = state;
   useEffect(() => {
     const getChaps = async () => {
       try {
         const chapsres = await axios.get(
           `${server}/learning/module/${module_id}/`,
         );
+        const update = await axios.post(`${server}/learning/module/complete/`, {
+          user: user_id,
+          module: module_id,
+          completed: false,
+        });
+        console.log(update.data);
         setChaps(chapsres.data.chapters);
         console.log(chapsres.data);
         setModule_info({
@@ -33,7 +45,7 @@ const Learn = ({navigation, route}) => {
       }
     };
     getChaps();
-  }, [module_id]);
+  }, [module_id, user_id]);
   return (
     <View style={[silly.bg1, silly.f1, silly.jcaround, silly.p1]}>
       <View style={[silly.ais, silly.p1]}>
@@ -42,7 +54,14 @@ const Learn = ({navigation, route}) => {
         </SillyText>
         <SillyText>{module_info.description}</SillyText>
         <View style={[silly.w60p, silly.bg5, silly.bg5, silly.my1, silly.br5]}>
-          <View style={[silly.w20p, silly.h5, silly.bg2, silly.br5]} />
+          <View
+            style={[
+              silly.h5,
+              silly.bg2,
+              silly.br5,
+              {width: (chaps.length - quesIndex) * 0.2 * width},
+            ]}
+          />
         </View>
       </View>
       <Cards

@@ -45,9 +45,8 @@ const QuizIndex = ({navigation, route}) => {
             </View>
             <SillyView bg={clr3} py={0.5} />
             <SillyText my={10} size={14} color={clr5}>
-              You have successfully completed this module. {'\n'} Earn some
-              bonus points on answering a short{'\n'} quiz on this topic, if you
-              like!
+              You have successfully completed this module.r Earn some bonus
+              points on answering a short quiz on this topic, if you like!
             </SillyText>
           </View>
         </SillyView>

@@ -78,10 +78,10 @@ const ProfileOverview = () => {
             <SillyText mx={10} family="SemiBold" size={22}>
               {name}
             </SillyText>
-            <Icon name="create-outline" size={20} />
+            <Icon color={clr2} name="create-outline" size={20} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-            <Icon size={25} name="settings-outline" />
+            <Icon color={clr2} size={25} name="settings-outline" />
           </TouchableOpacity>
         </View>
         <SillyView
@@ -90,7 +90,7 @@ const ProfileOverview = () => {
           px={30}
           style={[silly.fr, silly.jcbtw, silly.aic]}>
           <View style={[silly.aic]}>
-            <Icon name="medal-outline" size={25} />
+            <Icon color={clr2} name="medal-outline" size={25} />
             <SillyText my={5} center style={[silly.w20p]} family="SemiBold">
               {earnings.badges.length} Badges Earned
             </SillyText>
@@ -98,14 +98,14 @@ const ProfileOverview = () => {
           <SillyView bg={clr5} style={[silly.h80]} px={0.4} />
 
           <View style={[silly.aic]}>
-            <Icon name="star-outline" size={25} />
+            <Icon color={clr2} name="star-outline" size={25} />
             <SillyText my={5} center style={[silly.w20p]} family="SemiBold">
               {earnings.points} Points Earned
             </SillyText>
           </View>
           <SillyView bg={clr5} style={[silly.h80]} px={0.4} />
           <View style={[silly.aic]}>
-            <Icon name="people-outline" size={25} />
+            <Icon color={clr2} name="people-outline" size={25} />
 
             <SillyText my={5} center style={[silly.w20p]} family="SemiBold">
               4 Friends Added

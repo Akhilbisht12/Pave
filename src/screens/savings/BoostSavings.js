@@ -9,7 +9,7 @@ import {
   SillyButton,
 } from '../../Silly/components/silly_comps';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {clr5} from '../../config/globals';
+import {clr2, clr5} from '../../config/globals';
 const points = [
   {
     name: 'Investments',
@@ -87,7 +87,7 @@ const BoostSavings = ({boost, setBoost}) => {
       <TouchableOpacity
         style={[silly.aie, silly.p2]}
         onPress={() => setBoost(false)}>
-        <Icon name="close-outline" size={35} />
+        <Icon color={clr2} name="close-outline" size={35} />
       </TouchableOpacity>
       <ScrollView nestedScrollEnabled style={[silly.h80p]}>
         <View style={[silly.aic]}>
