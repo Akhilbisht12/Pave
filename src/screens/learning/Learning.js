@@ -135,16 +135,22 @@ const Learning = () => {
             {
               name: `${overview.module_active} active modules`,
               color: '#ffc145',
+              icon: 'book-outline',
             },
             {
               color: '#ff6b6c',
               name: `${overview.module_completed} modules completed`,
+              icon: 'checkmark-outline',
             },
-            {color: '5b5f97', name: `${overview.score} points earned`},
+            {
+              color: '5b5f97',
+              name: `${overview.score} points earned`,
+              icon: 'radio-button-on-outline',
+            },
           ].map((item, i) => {
             return (
               <View key={i} style={[silly.aic]}>
-                <Ionicons color={clr2} name="checkmark-circle" size={25} />
+                <Ionicons color={clr2} name={item.icon} size={25} />
                 <SillyText
                   my={5}
                   center

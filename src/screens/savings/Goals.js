@@ -38,6 +38,41 @@ const Goals = ({navigation}) => {
           </SillyText>
         </View>
         <View style={[silly.my3]}>
+          <TouchableOpacity onPress={handleSaving}>
+            <SillyView
+              my={20}
+              mx={10}
+              style={[
+                silly.h25p,
+                silly.fr,
+                silly.aic,
+                silly.jcbtw,
+                silly.p1,
+                silly.bg1,
+              ]}>
+              <View>
+                <SillyText style={[silly.mb1]} size={18} color={clr3}>
+                  SELECTED
+                </SillyText>
+                <SillyText
+                  style={[silly.mb1]}
+                  family="SemiBold"
+                  size={25}
+                  color={clr3}>
+                  Simple Saver
+                </SillyText>
+
+                <SillyText style={[silly.w60p]} color={clr3}>
+                  Save without a goal and let your wealth grow without
+                  limitations, simply set it and forget it!
+                </SillyText>
+              </View>
+              <Image
+                source={savings_art}
+                style={[silly.w40p, silly.h25p, silly.rmcon, silly.mr1]}
+              />
+            </SillyView>
+          </TouchableOpacity>
           <TouchableOpacity>
             <SillyView
               my={5}
@@ -70,41 +105,6 @@ const Goals = ({navigation}) => {
                 source={{
                   uri: 'https://storytale-public2.b-cdn.net/2021/08/16/b49640bc-85bf-4b50-87fa-a6678204fae2-Prize.png',
                 }}
-                style={[silly.w40p, silly.h25p, silly.rmcon, silly.mr1]}
-              />
-            </SillyView>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleSaving}>
-            <SillyView
-              my={20}
-              mx={10}
-              style={[
-                silly.h25p,
-                silly.fr,
-                silly.aic,
-                silly.jcbtw,
-                silly.p1,
-                silly.bg1,
-              ]}>
-              <View>
-                <SillyText style={[silly.mb1]} size={18} color={clr3}>
-                  SELECTED
-                </SillyText>
-                <SillyText
-                  style={[silly.mb1]}
-                  family="SemiBold"
-                  size={25}
-                  color={clr3}>
-                  Simple Saver
-                </SillyText>
-
-                <SillyText style={[silly.w60p]} color={clr3}>
-                  Save without a goal and let your wealth grow without
-                  limitations, simply set it and forget it!
-                </SillyText>
-              </View>
-              <Image
-                source={savings_art}
                 style={[silly.w40p, silly.h25p, silly.rmcon, silly.mr1]}
               />
             </SillyView>

@@ -56,7 +56,7 @@ const Points = () => {
         {/* how points work widget */}
         <TouchableOpacity onPress={() => navigation.navigate('PointsGuide')}>
           <SillyView
-            py={20}
+            py={10}
             px={20}
             style={[silly.fr, silly.jcbtw, silly.aic]}
             round={5}
@@ -75,37 +75,24 @@ const Points = () => {
         </TouchableOpacity>
         {/* menu to multiple screens */}
         <View style={[silly.fr, silly.jcbtw, silly.aic]}>
-          <SillyButton
-            round={12}
-            style={[silly.fr, silly.aic, silly.jcaround, silly.w30p]}
-            py={15}
-            bg={sec_clr_opac}>
-            <Ionicons name="school-outline" color={clr1} size={25} />
-            <SillyText size={18} color={clr1}>
-              Learn
-            </SillyText>
-          </SillyButton>
-          <SillyButton
-            round={12}
-            style={[silly.fr, silly.aic, silly.jcaround, silly.w30p]}
-            py={15}
-            bg={sec_clr_opac}>
-            <Ionicons name="cash-outline" color={clr1} size={25} />
-            <SillyText size={18} color={clr1}>
-              Save
-            </SillyText>
-          </SillyButton>
-          <SillyButton
-            round={12}
-            style={[silly.fr, silly.aic, silly.jcaround, silly.w30p]}
-            py={15}
-            px={10}
-            bg={sec_clr_opac}>
-            <Ionicons name="people-outline" color={clr1} size={25} />
-            <SillyText size={16} color={clr1}>
-              Add Friends
-            </SillyText>
-          </SillyButton>
+          {[
+            {name: 'Learn', icon: 'school-outline'},
+            {name: 'Learn', icon: 'cash-outline'},
+            {name: 'Learn', icon: 'people-outline'},
+          ].map(item => {
+            return (
+              <SillyButton
+                round={12}
+                style={[silly.fr, silly.aic, silly.jcaround, silly.w30p]}
+                py={10}
+                bg={clr1}>
+                <Ionicons name={item.icon} color={clr2} size={25} />
+                <SillyText size={18} color={clr2}>
+                  {item.name}
+                </SillyText>
+              </SillyButton>
+            );
+          })}
         </View>
       </View>
 

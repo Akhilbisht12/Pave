@@ -113,13 +113,13 @@ const Signup = () => {
         <TouchableOpacity
           onPress={viewForm}
           style={[silly.jcc, silly.aic, otpScreen === 0 ? silly.df : silly.dn]}>
-          <Ionicon name="chevron-up" size={35} color="gray" />
-          <Ionicon
+          <Ionicon name="chevron-up-circle-outline" size={35} color={clr1} />
+          {/* <Ionicon
             style={silly.mt2M}
             name="chevron-up"
             size={35}
             color="gray"
-          />
+          /> */}
         </TouchableOpacity>
         <ProfileDetails
           setAuthData={setAuthData}

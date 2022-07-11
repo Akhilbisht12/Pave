@@ -1,4 +1,4 @@
-import {View, Text, ToastAndroid} from 'react-native';
+import {View, Text, ToastAndroid, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
@@ -43,31 +43,38 @@ const GoldBalance = () => {
   }, [user_id]);
   return (
     <View style={[silly.fr, silly.aic, silly.jceven]}>
-      <SillyView
-        bg={clr2}
-        elev={2}
-        style={[silly.w45p, silly.h20p, silly.jceven]}>
-        <SillyText my={6} family="SemiBold" size={22} color={clr1}>
-          Savings
-        </SillyText>
-        <SillyText family="SemiBold" size={30} color={'orange'}>
-          {inves.net} gms
-        </SillyText>
-        <SillyText color={clr4}>Invested in 24K | 99.95 % Pure Gold</SillyText>
-        <View style={[silly.fr, silly.jcbtw, silly.aic]}>
-          <SillyText my={6} size={22} color={clr4}>
-            ≈ ₹{inves.net_amount}
+      <TouchableOpacity
+        onPress={() => navigation.navigate('AddSaving', {overview: false})}>
+        <SillyView
+          bg={clr2}
+          elev={2}
+          style={[silly.w45p, silly.h20p, silly.jceven]}>
+          <SillyText my={6} family="SemiBold" size={22} color={clr1}>
+            Savings
           </SillyText>
-          <SillyButton
-            onPress={() => navigation.navigate('AddSaving', {overview: false})}
-            my={0.01}
-            bg={clr1}
-            px={4}
-            py={4}>
-            <Icon name="add-outline" color={clr2} size={25} />
-          </SillyButton>
-        </View>
-      </SillyView>
+          <SillyText family="SemiBold" size={26} color={'orange'}>
+            {inves.net} gms
+          </SillyText>
+          <SillyText color={clr4}>
+            Invested in 24K | 99.95 % Pure Gold
+          </SillyText>
+          <View style={[silly.fr, silly.jcbtw, silly.aic]}>
+            <SillyText my={6} size={22} color={clr4}>
+              ≈ ₹{inves.net_amount}
+            </SillyText>
+            <SillyButton
+              onPress={() =>
+                navigation.navigate('AddSaving', {overview: false})
+              }
+              my={0.01}
+              bg={clr1}
+              px={4}
+              py={4}>
+              <Icon name="add-outline" color={clr2} size={25} />
+            </SillyButton>
+          </View>
+        </SillyView>
+      </TouchableOpacity>
       <SillyView
         bg={clr2}
         elev={2}

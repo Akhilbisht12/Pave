@@ -12,7 +12,7 @@ import React, {useRef, useState, useCallback} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {SillyView, SillyText} from '../../Silly/components/silly_comps';
 import silly from '../../Silly/styles/silly';
-import {clr1, clr4, clr5} from '../../config/globals';
+import {clr1, clr2, clr4, clr5} from '../../config/globals';
 import img1 from '../../assets/images/ob1.png';
 import img2 from '../../assets/images/ob2.png';
 import img3 from '../../assets/images/ob3.png';
@@ -176,7 +176,7 @@ const PointsGuide = ({navigation}) => {
         bg={clr1}>
         <Image
           source={item.image}
-          style={[silly.w40p, silly.h25p, {resizeMode: 'contain'}]}
+          style={[silly.w40p, silly.h15p, {resizeMode: 'contain'}]}
         />
         <SillyText size={30} family="SemiBold">
           {item.name}
@@ -199,7 +199,7 @@ const PointsGuide = ({navigation}) => {
           <SillyText color={clr1} size={32} family="SemiBold">
             How to earn {'\n'}points?
           </SillyText>
-          <SillyView my={15} py={0.1} px={0.1}>
+          {/* <SillyView my={15} py={0.1} px={0.1}>
             <Animated.View
               style={[
                 silly.bg1,
@@ -208,7 +208,7 @@ const PointsGuide = ({navigation}) => {
                 {width: progressInterpolation},
               ]}
             />
-          </SillyView>
+          </SillyView> */}
         </View>
         <Ionicons name="ribbon" size={100} color={clr1} />
       </View>
@@ -241,8 +241,7 @@ const PointsGuide = ({navigation}) => {
             Points List
           </SillyText>
           <View style={[silly.aic]}>
-            <Icon size={30} name="chevron-up" />
-            <Icon size={30} style={{marginTop: -20}} name="chevron-up" />
+            <Icon size={30} color={clr2} name="chevron-up-circle-outline" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -252,8 +251,7 @@ const PointsGuide = ({navigation}) => {
             AnimControl.AnimTiming(pan, -100, 500);
           }}>
           <View style={[silly.aic]}>
-            <Icon size={30} name="chevron-down" />
-            <Icon size={30} style={{marginTop: -20}} name="chevron-down" />
+            <Icon size={30} color={clr2} name="chevron-down-circle-outline" />
           </View>
         </TouchableOpacity>
         <ScrollView style={[open ? {} : silly.dn]}>

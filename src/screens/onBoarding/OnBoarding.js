@@ -3,23 +3,24 @@ import React, {useRef, useState} from 'react';
 import silly from '../../Silly/styles/silly';
 import SillyText from '../../Silly/components/SillyText';
 import SillyButton from '../../Silly/components/SillyButton';
-import globals, {clr1, clr2} from '../../config/globals';
+import globals, {clr1, clr2, clr4} from '../../config/globals';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 const OnBoarding = ({navigation}) => {
   const ob_data = [
     {
       id: 0,
-      imageUri: require('../../assets/illustrations/ob_one.png'),
-      text: 'Create your \n account',
+      imageUri: require('../../assets/illustrations/quiz.png'),
+      text: 'Learn while you earn',
     },
     {
       id: 1,
       imageUri: require('../../assets/illustrations/ob_two.png'),
-      text: 'Smartly save and \n grow your money',
+      text: 'Effortless Investing that works for you',
     },
     {
       id: 2,
       imageUri: require('../../assets/illustrations/ob_three.png'),
-      text: 'Share your growth and \n rewards with friends',
+      text: 'Reward for building a habit',
     },
   ];
 
@@ -79,23 +80,35 @@ const OnBoarding = ({navigation}) => {
       <FlatList
         ref={fRef}
         data={ob_data}
+        showsHorizontalScrollIndicator={false}
         renderItem={item => renderComp(item)}
         keyExtractor={item => item.id}
         horizontal
         pagingEnabled
         onViewableItemsChanged={onViewRef.current}
       />
-      <View style={[silly.my5, silly.fr, silly.jcbtw, silly.w100p, silly.aic]}>
-        <SillyButton mx={20} onPress={() => navigation.navigate('Signup')}>
-          <SillyText color={clr1} size={18}>
-            Skip
-          </SillyText>
-        </SillyButton>
-        <SillyButton onPress={handleFlatNext} mx={20} bg={clr1} px={40}>
-          <SillyText color={clr2} size={20} style={[silly.fwb]}>
-            Next
-          </SillyText>
-        </SillyButton>
+      <View>
+        <View style={[silly.fr, silly.jcc, silly.w100p, silly.aic, silly.mt2]}>
+          {/* <SillyButton mx={20} onPress={() => navigation.navigate('Signup')}>
+            <SillyText color={clr1} size={18}>
+              Skip
+            </SillyText>
+          </SillyButton> */}
+          <SillyButton onPress={handleFlatNext} mx={20} bg={clr1} px={40}>
+            {/* <SillyText color={clr2} size={20} style={[silly.fwb]}>
+              Next
+            </SillyText> */}
+            <Ionicon color={clr2} name="arrow-forward" size={20} />
+          </SillyButton>
+        </View>
+        <View style={[silly.fr, silly.aic, silly.jcc, silly.my2]}>
+          <SillyText color={clr4}>Already have an account?</SillyText>
+          <SillyButton onPress={() => navigation.navigate('Login')}>
+            <SillyText family="Medium" color={clr1}>
+              Log In.
+            </SillyText>
+          </SillyButton>
+        </View>
       </View>
     </View>
   );

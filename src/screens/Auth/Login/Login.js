@@ -207,6 +207,7 @@ const Login = () => {
                 Password
               </SillyText> */}
               <SillyInput
+                secureTextEntry={true}
                 value={login.password}
                 onChangeText={e => setLogin({...login, password: e})}
                 style={[silly.fs25, {color: clr1}]}
