@@ -93,7 +93,7 @@ const MyProfile = () => {
     const getUserProfile = async () => {
       try {
         const profileData = await axios.get(`${server}/profile/${user_id}/`);
-        console.log(profileData);
+        console.log(profileData.data);
         setProfile({
           name: profileData.data.user_details.name,
           email: profileData.data.user_details.email,

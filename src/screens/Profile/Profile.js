@@ -25,7 +25,7 @@ const Profile = ({navigation}) => {
           </TouchableOpacity>
         </View>
         {/* change profile */}
-        <View style={[silly.my2]}>
+        {/* <View style={[silly.my2]}>
           <View style={[silly.fr, silly.jcbtw, silly.mb1]}>
             <SillyText color={clr4} family="SemiBold" size={25}>
               User Details
@@ -48,7 +48,7 @@ const Profile = ({navigation}) => {
               </SillyText>
             </SillyButton>
           </SillyView>
-        </View>
+        </View> */}
 
         <View>
           <View style={[silly.fr, silly.jcbtw, silly.my2]}>

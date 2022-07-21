@@ -10,17 +10,20 @@ const OnBoarding = ({navigation}) => {
     {
       id: 0,
       imageUri: require('../../assets/illustrations/quiz.png'),
-      text: 'Learn while you earn',
+      text: 'Effortless Investing that works for you',
+      desc: 'Start investing with as little as INR 10, without having to spend months researching how to get started. ',
     },
     {
       id: 1,
       imageUri: require('../../assets/illustrations/ob_two.png'),
-      text: 'Effortless Investing that works for you',
+      text: 'Independence  🤝 financial literacy',
+      desc: 'For the first time, you can get personalized bite-sized insights and modules to better prepare you for your interactions with money. ',
     },
     {
       id: 2,
       imageUri: require('../../assets/illustrations/ob_three.png'),
-      text: 'Reward for building a habit',
+      text: 'Rewards for building better money habits',
+      desc: 'Consistency is made easier when you are rewarded for learning and maintaining investing streaks.',
     },
   ];
 

@@ -69,6 +69,7 @@ const DailySpin = () => {
       <View style={[silly.aic]}>
         {/* spins left view */}
         <SillyView
+          py={2}
           bg="transparent"
           style={[
             silly.fr,
@@ -79,17 +80,17 @@ const DailySpin = () => {
             silly.w70p,
           ]}>
           <View style={[silly.fr, silly.aic]}>
-            <Ionicons name="timer" color={clr5} size={20} />
-            <SillyText mx={5} color={clr5} size={18}>
+            <Ionicons name="timer" color={clr5} size={18} />
+            <SillyText mx={5} color={clr5} size={16}>
               {Math.round(points / 500)} Spins left
             </SillyText>
           </View>
           <SillyView px={1} py={15} />
           <View style={[silly.fr, silly.aic]}>
-            <Ionicons name="star" color={clr5} size={20} />
+            <Ionicons name="star" color={clr5} size={18} />
 
-            <SillyText color={clr5} size={18} mx={5}>
-              {points} points
+            <SillyText color={clr5} size={16} mx={5}>
+              {Math.round(points / 1000)}K points
             </SillyText>
           </View>
         </SillyView>

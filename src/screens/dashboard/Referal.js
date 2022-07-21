@@ -1,14 +1,38 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {View, Share, TouchableOpacity} from 'react-native';
+import React, {useContext} from 'react';
 import {SillyView, SillyText} from '../../Silly/components/silly_comps';
 import {clr1, clr2, clr4} from '../../config/globals';
 import Icons from 'react-native-vector-icons/Ionicons';
 import silly from '../../Silly/styles/silly';
+import axios from 'axios';
+import {server} from '../../config/server_url';
+import AuthContext from '../../navigations/AuthContext';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 const Referal = () => {
+  const {state} = useContext(AuthContext);
+  const {user_id} = state;
+  const handleShare = async () => {
+    try {
+      axios.get(`${server}/profile/${user_id}/`).then(async user => {
+        const link = await dynamicLinks().buildShortLink({
+          link: `https://referrals.pave.money/${user.data.referral_code}`,
+          android: {
+            packageName: 'com.pave',
+          },
+          domainUriPrefix: 'https://referrals.pave.money',
+        });
+        await Share.share({
+          message: `Start investing with as little as ₹10 with Pave while you level up your personal finance game. Join with this link: ${link}`,
+        });
+      });
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
   return (
-    <TouchableOpacity>
-      <SillyView px={15} py={25} bg={clr2} mx={10}>
+    <TouchableOpacity onPress={handleShare}>
+      <SillyView elev={2} px={15} py={25} bg={clr2} mx={10}>
         <SillyText family="SemiBold" size={22} color={clr1}>
           Add a friend
         </SillyText>

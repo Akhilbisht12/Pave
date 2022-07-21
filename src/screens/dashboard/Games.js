@@ -50,9 +50,13 @@ const Games = () => {
             Play for the mystery prize (revealed when live)
           </SillyText>
         </View>
-        <SillyButton px={10} style={[silly.fr, silly.jcc, silly.aic]} bg={clr1}>
-          <Icon name="timer-outline" color={clr2} size={22} />
-          <SillyText mx={5} family="SemiBold" size={18}>
+        <SillyButton
+          py={6}
+          px={8}
+          style={[silly.fr, silly.jcc, silly.aic]}
+          bg={clr1}>
+          <Icon name="timer-outline" color={clr2} size={16} />
+          <SillyText mx={5} family="SemiBold" size={14}>
             Almost Here!
           </SillyText>
         </SillyButton>

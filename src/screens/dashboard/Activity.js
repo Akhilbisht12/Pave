@@ -31,7 +31,6 @@ const Activity = () => {
       try {
         const modulesres = await axios.get(`${server}/learning/modules/`);
         setModules(modulesres.data.results);
-        console.log(modulesres.data);
       } catch (error) {
         console.log(error.response);
       }

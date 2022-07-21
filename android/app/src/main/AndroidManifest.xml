@@ -19,8 +19,7 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.catergory.BROWSABLE" />
-				<data android:scheme="app" android:host="deeplink" />
-				<data android:scheme="http" android:host="referals.upgrate.in" />
+				<data android:scheme="https" android:host="referrals.pave.money" />
 			</intent-filter>
 		</activity>
 	</application>

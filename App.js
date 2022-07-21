@@ -5,8 +5,8 @@ import StackNav from './src/navigations/StackNav';
 import {Provider} from 'react-redux';
 import Store from './src/store/Store';
 import axios from 'axios';
-import silly from './src/Silly/styles/silly';
 import messaging from '@react-native-firebase/messaging';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {server} from './src/config/server_url';
 
 const App = () => {
@@ -21,7 +21,32 @@ const App = () => {
       console.log(error);
     }
   };
+  async function buildLink() {
+    try {
+      const link = await dynamicLinks().buildShortLink({
+        link: 'https://referrals.pave.money/user=akhil',
+        android: {
+          packageName: 'com.pave',
+        },
+        domainUriPrefix: 'https://referrals.pave.money',
+      });
+      console.log(link);
+      return link;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const getLinks = async () => {
+    try {
+      const link = await dynamicLinks().getInitialLink();
+      console.log(link, 'link from get');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
+    // buildLink();
+    getLinks();
     messaging()
       .getToken()
       .then(token => {

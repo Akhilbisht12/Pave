@@ -74,7 +74,7 @@ const Card = () => {
           <View style={[silly.jcc, silly.aic, silly.pxh]}>
             <Ionicons name="star" color={clr1} size={18} />
             <SillyText color={clr1} size={20}>
-              {earnings.points ? earnings.points : 0}
+              {earnings.points ? `${Math.round(earnings.points / 1000)}K` : 0}
             </SillyText>
           </View>
         </SillyView>

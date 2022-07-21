@@ -24,7 +24,6 @@ const MoneyTalks = () => {
   useEffect(() => {
     const slidesreq = async () => {
       const slidesres = await axios.get(`${server}/money-talks/`);
-      console.log(slidesres.data);
       setSlides(slidesres.data.results);
       setCurrentIndex(slidesres.data.results[0].id);
     };
@@ -66,7 +65,6 @@ const MoneyTalks = () => {
   };
 
   const onViewRef = useRef(flat => {
-    console.log(flat.viewableItems);
     setCurrentIndex(flat.viewableItems[0].item.id);
   });
   return (
