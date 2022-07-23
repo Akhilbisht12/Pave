@@ -1,12 +1,11 @@
 import {View, ToastAndroid} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import silly from '../../../Silly/styles/silly';
 import {
   SillyText,
   SillyInput,
   SillyButton,
 } from '../../../Silly/components/silly_comps';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 import {clr5, site_color} from '../../../config/globals';
 import axios from 'axios';
 import {server} from '../../../config/server_url';
@@ -15,11 +14,20 @@ import {useNavigation} from '@react-navigation/native';
 import Storage from '@react-native-async-storage/async-storage';
 
 const ProfileDetails = ({setOtpScreen, otpScreen, setAuthData}) => {
+  useEffect(() => {
+    getReferral();
+  }, []);
+  const getReferral = async () => {
+    const code = await Storage.getItem('referral');
+    if (code) {
+      setSignup({...signup, referee_code: code});
+    }
+  };
   const [signup, setSignup] = useState({
     name: '',
     email: '',
     mobile: '',
-    referee_code: 'SfRUWo',
+    referee_code: '',
   });
   const navigation = useNavigation();
   const handleRegister = async () => {

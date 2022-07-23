@@ -14,23 +14,37 @@ import AuthContext from './AuthContext';
 import axios from 'axios';
 import Storage from '@react-native-async-storage/async-storage';
 import {server} from '../config/server_url';
-import Signup from '../screens/Auth/signup/Signup';
 import AxiosCurlirize from 'axios-curlirize';
-import {useNavigation} from '@react-navigation/native';
 import QuizList from '../screens/learning/quiz/QuizList';
-import {ScrollView, RefreshControl} from 'react-native';
+import {ScrollView} from 'react-native';
 import silly from '../Silly/styles/silly';
+import jwt_decode from 'jwt-decode';
 
 const Authenticated = () => {
-  const navigation = useNavigation();
   const {state, dispatch} = useContext(AuthContext);
-  const {access, refresh, user_id, id} = state;
-  console.log('acce  ' + access);
-  axios.interceptors.request.use(req => {
-    if (access) {
+  const {access, refresh} = state;
+  axios.interceptors.request.use(async req => {
+    const decode = jwt_decode(access);
+    const exp = decode.exp;
+    if (exp < Date.now()) {
+      try {
+        const axiosApi = axios.create();
+        const access_token = await axiosApi.post(
+          `${server}/iam/auth/token/refresh/`,
+          {refresh},
+        );
+        await Storage.setItem('access', access_token.data.access);
+        dispatch({type: 'update_token', token: access_token.data.access});
+        req.headers.Authorization = `Bearer ${access_token.data.access}`;
+        return req;
+      } catch (ref_error) {
+        dispatch({type: 'logout'});
+      }
+    } else {
+      console.log('this ran ');
       req.headers.Authorization = `Bearer ${access}`;
+      return req;
     }
-    return req;
   });
 
   axios.interceptors.response.use(
@@ -40,9 +54,7 @@ const Authenticated = () => {
     async error => {
       const originalRequest = error.config;
       if (error.response.data.code === 'token_not_valid') {
-        console.info(error.response.data);
         const axiosApi = axios.create();
-        originalRequest._retry = true;
         AxiosCurlirize(axiosApi);
         const getNewToken = async () => {
           try {
@@ -50,17 +62,11 @@ const Authenticated = () => {
               `${server}/iam/auth/token/refresh/`,
               {refresh},
             );
-            console.info(access_token.data);
             await Storage.setItem('access', access_token.data.access);
-            // CodePush.restartApp();
             dispatch({type: 'update_token', token: access_token.data.access});
-            // axios.defaults.headers.common.Authorization = `Bearer ${access_token.data.access}`;
-            // axiosApi.defaults.headers.common.Authorization = `Bearer ${access_token.data.access}`;
             originalRequest.headers.Authorization = `Bearer ${access_token.data.access}`;
             return originalRequest;
-            // return axiosApi(originalRequest);
           } catch (ref_error) {
-            console.log(ref_error.response);
             dispatch({type: 'logout'});
           }
         };

@@ -8,7 +8,7 @@ import axios from 'axios';
 import messaging from '@react-native-firebase/messaging';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {server} from './src/config/server_url';
-
+import Storage from '@react-native-async-storage/async-storage';
 const App = () => {
   const sendFirebaseToken = async token => {
     try {
@@ -23,7 +23,7 @@ const App = () => {
   };
   async function buildLink() {
     try {
-      const link = await dynamicLinks().buildShortLink({
+      const link = await dynamicLinks().buildLink({
         link: 'https://referrals.pave.money/user=akhil',
         android: {
           packageName: 'com.pave',
@@ -39,7 +39,10 @@ const App = () => {
   const getLinks = async () => {
     try {
       const link = await dynamicLinks().getInitialLink();
-      console.log(link, 'link from get');
+      if (link.url) {
+        const code = link.url.split('?')[1];
+        Storage.setItem('referral', code);
+      }
     } catch (error) {
       console.log(error);
     }

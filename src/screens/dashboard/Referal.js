@@ -1,5 +1,5 @@
 import {View, Share, TouchableOpacity} from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {SillyView, SillyText} from '../../Silly/components/silly_comps';
 import {clr1, clr2, clr4} from '../../config/globals';
 import Icons from 'react-native-vector-icons/Ionicons';
@@ -12,24 +12,30 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 const Referal = () => {
   const {state} = useContext(AuthContext);
   const {user_id} = state;
+  const [referal, setReferal] = useState('');
   const handleShare = async () => {
     try {
-      axios.get(`${server}/profile/${user_id}/`).then(async user => {
-        const link = await dynamicLinks().buildShortLink({
-          link: `https://referrals.pave.money/${user.data.referral_code}`,
-          android: {
-            packageName: 'com.pave',
-          },
-          domainUriPrefix: 'https://referrals.pave.money',
-        });
-        await Share.share({
-          message: `Start investing with as little as ₹10 with Pave while you level up your personal finance game. Join with this link: ${link}`,
-        });
+      const link = await dynamicLinks().buildLink({
+        link: `https://referrals.pave.money/?${referal}`,
+        android: {
+          packageName: 'com.pave',
+        },
+        domainUriPrefix: 'https://referrals.pave.money',
+      });
+      await Share.share({
+        message: `Start investing with as little as ₹10 with Pave while you level up your personal finance game. Join with this link: ${link}`,
       });
     } catch (error) {
       console.log(error.response);
     }
   };
+  const getUser = async () => {
+    const user = await axios.get(`${server}/profile/${user_id}/`);
+    setReferal(user.data.user_details.referral_code);
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <TouchableOpacity onPress={handleShare}>
       <SillyView elev={2} px={15} py={25} bg={clr2} mx={10}>

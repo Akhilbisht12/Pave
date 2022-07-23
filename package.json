@@ -21,6 +21,7 @@
     "axios": "^0.27.2",
     "axios-curlirize": "^2.0.0",
     "d3-shape": "^3.1.0",
+    "jwt-decode": "^3.1.2",
     "moment": "^2.29.3",
     "react": "17.0.2",
     "react-native": "0.68.1",

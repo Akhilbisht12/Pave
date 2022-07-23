@@ -10,6 +10,7 @@ import {clr1, clr4} from '../../config/globals';
 import silly from '../../Silly/styles/silly';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ResetPassword from '../settings/ResetPassword';
+import Storage from '@react-native-async-storage/async-storage';
 
 const Profile = ({navigation}) => {
   const [editPassword, setEditPassword] = useState(false);
